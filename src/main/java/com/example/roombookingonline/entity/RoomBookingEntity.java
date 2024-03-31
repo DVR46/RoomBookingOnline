@@ -9,18 +9,18 @@ import java.time.LocalDateTime;
 public class RoomBookingEntity {
     @Id
     @JoinColumn(name = "reservation_number")
-    private String reservationNumber;
+    private Long reservationNumber;
     @Column(name = "check_in")
     private LocalDateTime checkIn;
     @Column(name = "check_out")
     private LocalDateTime checkOut;
     @Column(name = "order_code")
     private String orderCode;
-    public String getReservationNumber() {
+    public Long getReservationNumber() {
         return reservationNumber;
     }
 
-    public void setReservationNumber(String reservationNumber) {
+    public void setReservationNumber(Long reservationNumber) {
         this.reservationNumber = reservationNumber;
     }
 

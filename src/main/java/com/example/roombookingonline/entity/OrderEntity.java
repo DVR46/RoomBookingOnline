@@ -13,19 +13,21 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private AccountEntity accountEntity;
-    @OneToMany
-    private List<RoomDetailEntity> roomDetailEntities;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<RoomEntity> roomEntities;
     @Column(name = "coupon_code")
     private String couponCode;
     private double amount;
     @Column(name = "start_datetime")
     private LocalDateTime startDatetime;
     private LocalDateTime duration;
-    @Column(name = "order_datetime")
-    private LocalDateTime orderDatetime;
     private String code;
     @Column(name = "message_services")
     private boolean messageServices;
+    @Column(name = "room_service")
+    private boolean roomService;
+    @Column(name = "order_date")
+    private LocalDateTime orderDate;
 
     public void setId(Long id) {
         this.id = id;
@@ -43,13 +45,6 @@ public class OrderEntity {
         this.accountEntity = accountEntity;
     }
 
-    public List<RoomDetailEntity> getRoomDetailEntities() {
-        return roomDetailEntities;
-    }
-
-    public void setRoomDetailEntities(List<RoomDetailEntity> roomDetailEntities) {
-        this.roomDetailEntities = roomDetailEntities;
-    }
 
     public String getCouponCode() {
         return couponCode;
@@ -83,14 +78,6 @@ public class OrderEntity {
         this.duration = duration;
     }
 
-    public LocalDateTime getOrderDatetime() {
-        return orderDatetime;
-    }
-
-    public void setOrderDatetime(LocalDateTime orderDatetime) {
-        this.orderDatetime = orderDatetime;
-    }
-
     public boolean isMessageServices() {
         return messageServices;
     }
@@ -105,5 +92,29 @@ public class OrderEntity {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public boolean isRoomService() {
+        return roomService;
+    }
+
+    public void setRoomService(boolean roomService) {
+        this.roomService = roomService;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public List<RoomEntity> getRoomEntities() {
+        return roomEntities;
+    }
+
+    public void setRoomEntities(List<RoomEntity> roomEntities) {
+        this.roomEntities = roomEntities;
     }
 }
