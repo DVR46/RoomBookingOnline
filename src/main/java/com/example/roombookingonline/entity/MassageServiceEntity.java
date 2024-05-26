@@ -3,6 +3,7 @@ package com.example.roombookingonline.entity;
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,8 +14,10 @@ public class MassageServiceEntity {
     private Long id;
     @Column(name = "start_datetime")
     private LocalDateTime startDatetime;
-    private LocalDateTime duration;
+    @Column(name = "end_datetime")
+    private LocalDateTime endDatetime;
     @OneToOne
+    @JoinColumn(name = "order_id")
     private OrderEntity orderEntity;
     private double amount;
 
@@ -34,12 +37,12 @@ public class MassageServiceEntity {
         this.startDatetime = startDatetime;
     }
 
-    public LocalDateTime getDuration() {
-        return duration;
+    public LocalDateTime getEndDatetime() {
+        return endDatetime;
     }
 
-    public void setDuration(LocalDateTime duration) {
-        this.duration = duration;
+    public void setEndDatetime(LocalDateTime endDatetime) {
+        this.endDatetime = endDatetime;
     }
 
     public OrderEntity getOrderEntity() {

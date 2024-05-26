@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/manager/room/create" method="post">
+        <label>Room Number:</label>
+        <input type="number" step="1" th:field="*{room.roomNumber}">
+        <label>Room Type:</label>
+        <select th:field="*{room.roomTypeEntity.id}">
+            <option th:each="type : ${roomTypeList}" th:text="${type.roomTypeDetail.view}+' '+${type.name}"
+            th:value="${type.id}"></option>
+        </select>
+        <label>Actived:</label>
+        <input type="checkbox" th:field="*{room.active}">
+        <label>Password:</label>
+        <input type="number" th:field="*{roomDetail.password}">
+        <label>Status:</label>
+        <select th:field="*{roomDetail.status}">
+            <option th:each="status : ${statusList}" th:text="${status}" th:value="${status}"></option>
+        </select>
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html>

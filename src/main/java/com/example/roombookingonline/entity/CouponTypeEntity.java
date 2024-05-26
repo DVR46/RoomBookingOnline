@@ -15,10 +15,9 @@ public class CouponTypeEntity {
     @JoinColumn(name = "room_type_id")
     private RoomTypeEntity roomTypeEntity;
     private double discount;
-    @Column(name = "account_role")
-    private String accountRole;
     @OneToMany(mappedBy = "couponTypeEntity")
     private List<CouponEntity> couponEntities;
+    private String description;
 
     public void setId(Long id) {
         this.id = id;
@@ -52,19 +51,19 @@ public class CouponTypeEntity {
         this.discount = discount;
     }
 
-    public String getAccountRole() {
-        return accountRole;
-    }
-
-    public void setAccountRole(String accountRole) {
-        this.accountRole = accountRole;
-    }
-
     public List<CouponEntity> getCouponEntities() {
         return couponEntities;
     }
 
     public void setCouponEntities(List<CouponEntity> couponEntities) {
         this.couponEntities = couponEntities;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -10,7 +10,7 @@ public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
+    @ManyToMany(mappedBy = "customers")
     private List<RoomBookingEntity> roomBookingEntities;
     @Column(name = "id_cart_no")
     private Long idCartNo;

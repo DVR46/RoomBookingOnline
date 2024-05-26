@@ -1,21 +1,31 @@
 package com.example.roombookingonline.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "room_booking")
 public class RoomBookingEntity {
     @Id
-    @JoinColumn(name = "reservation_number")
+    @Column(name = "reservation_number")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationNumber;
     @Column(name = "check_in")
     private LocalDateTime checkIn;
     @Column(name = "check_out")
     private LocalDateTime checkOut;
-    @Column(name = "order_code")
-    private String orderCode;
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private OrderEntity orderEntity;
+    @ManyToMany
+    private List<CustomerEntity> customers;
+
     public Long getReservationNumber() {
         return reservationNumber;
     }
@@ -40,11 +50,19 @@ public class RoomBookingEntity {
         this.checkOut = checkOut;
     }
 
-    public String getOrderCode() {
-        return orderCode;
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public void setOrderEntity(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
+    }
+
+    public List<CustomerEntity> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<CustomerEntity> customers) {
+        this.customers = customers;
     }
 }

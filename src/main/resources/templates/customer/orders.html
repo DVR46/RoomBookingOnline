@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="/resources/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!--     Libraries Stylesheet -->
+    <link href="/resources/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/resources/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/resources/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/resources/css/style.css" rel="stylesheet">
+
+    <link href="/resources/css/personal/home.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <link href="/resources/css/personal/room-list.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-xxl bg-white p-0">
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-dark px-0">
+        <div class="row gx-0">
+            <div class="col-lg-3 bg-dark d-none d-lg-block">
+                <a href="/home" class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                    <h1 class="m-0 text-primary text-uppercase">Hotelvier</h1>
+                </a>
+            </div>
+            <div class="col-lg-9">
+                <div class="row gx-0 bg-white d-none d-lg-flex">
+                    <div class="col-lg-7 px-5 text-start">
+                        <div class="h-100 d-inline-flex align-items-center py-2 me-4">
+                            <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                            <p class="mb-0">123 Nguyen Trung Truc, Da Nang</p>
+                        </div>
+                        <div class="h-100 d-inline-flex align-items-center py-2">
+                            <i class="fa fa-phone-alt text-primary me-2"></i>
+                            <p class="mb-0">+012 345 6789</p>
+                        </div>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="col-lg-3 px-5 text-end">
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" th:text="${#authentication.name}"></a>
+                            <div class="dropdown-menu rounded-0 m-0" >
+                                <a class="dropdown-item" href="#">Account</a>
+                                <a class="dropdown-item" href="/user/orders">Order History</a>
+                                <a class="dropdown-item" href="/process_logout">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()" class="col-lg-5 px-5 text-end">
+                        <div class="d-inline-flex align-items-center py-2">
+                            <a class="me-3" href="/user/login">Login<i class="fa fa-sign-in-alt ms-1"></i></a>
+                            <a class="me-3" href="/register">Register<i class="fa fa-user-plus ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
+                    <a href="/home" class="navbar-brand d-block d-lg-none">
+                        <h1 class="m-0 text-primary text-uppercase">Hotelvier</h1>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="/home" class="nav-item nav-link">Home</a>
+                            <a href="#" class="nav-item nav-link">About</a>
+                            <a href="#" class="nav-item nav-link">Services</a>
+                            <div class="nav-item dropdown">
+                                <a href="/rooms" class="nav-link dropdown-toggle">Rooms</a>
+                                <div class="dropdown-menu rounded-0 m-0" >
+                                    <a th:each="type : ${nameList}" th:href="@{/rooms/type/{typeName}(typeName=${type})}"
+                                       class="dropdown-item" th:text="${type}"></a>
+                                </div>
+                            </div>
+                            <a href="#" class="nav-link nav-item">Pages</a>
+                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                        </div>
+                        <a href="/search" class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block">
+                            Book Now<i class="fa fa-arrow-right ms-3"></i></a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/resources/img/carousel-1.jpg);">
+        <div class="container-fluid page-header-inner py-5">
+            <div class="container text-center pb-5">
+                <h1 class="display-3 text-white mb-5 pb-2 animated slideInDown">Orders History</h1>
+                <nav aria-label="breadcrumb">
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+    <!--    Message Start-->
+    <th:block th:switch="${orderList.size()}">
+        <div th:case="0" class="container-fluid py-5 d-flex justify-content-center align-items-center">
+            <div class="col-md-9 bg-white p-5">
+                <div class="mb-4 text-center">
+                    <!--                <i class="fas fa-check-circle fa-4x text-success"></i>-->
+                </div>
+                <div class="text-center">
+                    <h2 class="text-secondary">No Booking Order In History</h2>
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-outline-primary my-5 m-2" href="/home">Back Home</a>
+                        <a class="btn btn-outline-success my-5 m-2" href="/search">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:case="*" style="display: none"></div>
+    </th:block>
+
+    <div class="container-fluid bg-white">
+        <div class="container py-5 h-100">
+            <div class="room-list-loop">
+                <th:block th:each="order : ${orderList}">
+                    <div class="room-box mb-4">
+                        <div class="row no-gutters justify-content-center">
+                            <div class="col-lg-5 col-md-10">
+                                <div class="room-img-wrap">
+<!--                                    <div class="room-img" style="background-image: url(/resources/room-type-images/bed/2/room-1.jpg);"></div>-->
+                                    <div class="room-img"><img th:src="@{${order.getQR()}}"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-10 shadow">
+                                <div class="room-desc">
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-8">
+                                            <ul class="icons mb-0" >
+                                                <li><i class="fa fa-bed"></i></li>
+                                                <li><i class="fa fa-wifi"></i></li>
+                                                <li><i class="fa fa-car"></i></li>
+                                                <li><i class="fa fa-coffee"></i></li>
+                                                <li><i class="fa fa-concierge-bell"></i></li>
+                                                <li><i class="fa fa-compress-arrows-alt"></i></li>
+                                                <li><i class="fa fa-swimmer"></i></li>
+                                            </ul>
+<!--                                            <h4 class="title"><a href="#" th:text="${order.roomOrderEntities.get(0).roomDetailEntities.roomEntity.roomTypeEntity.roomTypeDetail.view}+' '-->
+<!--                                            +${order.roomOrderEntities.get(0).roomDetailEntities.roomEntity.roomTypeEntity.name}"></a></h4>-->
+                                            <p class="text-muted mb-1">Place On: <span class="text-body fw-semi-bold" th:text="${order.orderDate.format(dateTimeFormatter)}"></span></p>
+                                            <p class="text-muted mb-1">Start: <span class="text-body fw-semi-bold" th:text="${order.startDatetime.format(formatter)}"></span></p>
+                                            <p class="text-muted mb-1">End: <span class="text-body fw-semi-bold" th:text="${order.endDatetime.format(formatter)}"></span></p>
+                                            <p class="text-muted mb-1">Status: <span class="text-body fw-semi-bold" th:text="${order.status}"></span></p>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="text-sm-center">
+                                                <span class="price" th:text="${order.amount} + '$'"></span>
+                                                <form action="/user/order" method="get">
+                                                    <input type="hidden" th:value="${order.id}" name="orderId">
+                                                    <button class="book-btn border-0 bg-white text-success fw-bold mt-3" style="font-size: 1.2em">View Detail</button>
+                                                </form>
+<!--                                                <a href="" class="book-btn">View Detail</a>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer wow fadeIn mt-5" data-wow-delay="0.1s">
+        <div class="container pb-5">
+            <div class="row g-5">
+                <div class="col-md-6 col-lg-4">
+                    <div class="bg-primary rounded p-4">
+                        <a href="/home"><h1 class="text-white text-uppercase mb-3">Hotelvier</h1></a>
+                        <p class="text-white mb-0">
+                            Thank you for choosing Hotelvier for your stay.
+                            We are excited to have you stay with us and hope you have a comfortable and enjoyable visit.
+                            We hope that this is just the first of many visits and that you will feel at home with us.
+                            <!--                                <a class="text-dark fw-medium" href="https://htmlcodex.com/hotel-html-template-pro">Hotelvier</a>-->
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h6 class="section-title text-start text-primary text-uppercase mb-4">Contact</h6>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Nguyen Trung Truc, Da Nang</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>huadaivi@gmail.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-12">
+                    <div class="row gy-5 g-4">
+                        <div class="col-md-6">
+                            <h6 class="section-title text-start text-primary text-uppercase mb-4">Company</h6>
+                            <a class="btn btn-link" href="">About Us</a>
+                            <a class="btn btn-link" href="">Contact Us</a>
+                            <a class="btn btn-link" href="">Privacy Policy</a>
+                            <a class="btn btn-link" href="">Terms & Condition</a>
+                            <a class="btn btn-link" href="">Support</a>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
+                            <a class="btn btn-link" href="">Food & Restaurant</a>
+                            <a class="btn btn-link" href="">Spa & Fitness</a>
+                            <a class="btn btn-link" href="">Sports & Gaming</a>
+                            <a class="btn btn-link" href="">Event & Party</a>
+                            <a class="btn btn-link" href="">GYM & Yoga</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">DVR</a>
+
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        <!--							Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>-->
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="">Home</a>
+                            <a href="">Cookies</a>
+                            <a href="">Help</a>
+                            <a href="">FQAs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+</div>
+</body>
+</html>

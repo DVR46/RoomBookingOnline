@@ -2,6 +2,10 @@ package com.example.roombookingonline.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Entity
 @Table(name = "room_type_image")
 public class RoomTypeImageEntity {
@@ -11,10 +15,28 @@ public class RoomTypeImageEntity {
     @ManyToOne
     @JoinColumn(name = "room_type_id")
     private RoomTypeEntity roomTypeEntity;
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private photoName name;
     private String description;
     @Column(name = "photo_path")
     private String photoPath;
+
+    public enum photoName{
+        front, back, bath, bed
+    }
+    public List<photoName> getAllPhotoName(){
+        List<photoName> statusEnums = Stream.of(photoName.values())
+                .collect(Collectors.toList());
+        return statusEnums;
+    }
+
+    public String getPhoto(){
+        if(photoPath == null || photoPath.isEmpty()){
+            return null;
+        }
+//        if (photoPath == null || photos.isBlank()) return "/resources/products-image/default/default-photos.jpg";
+        return "/resources/room-type-images/" + name + "/" + roomTypeEntity.getId() + "/" + photoPath;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -32,11 +54,11 @@ public class RoomTypeImageEntity {
         this.roomTypeEntity = roomTypeEntity;
     }
 
-    public String getName() {
+    public photoName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(photoName name) {
         this.name = name;
     }
 

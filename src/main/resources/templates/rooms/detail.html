@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title th:text="${roomType.name} + ' ' + ${roomType.roomBedType.name} + ' Bed' + ' - Hotelvier'"></title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">  
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/resources/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="/resources/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/resources/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/resources/css/style.css" rel="stylesheet">
+
+    <link href="/resources/css/personal/home.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-xxl bg-white p-0">
+
+        <!-- Header Start -->
+        <div class="container-fluid bg-dark px-0">
+            <div class="row gx-0">
+                <div class="col-lg-3 bg-dark d-none d-lg-block">
+                    <a href="/home" class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                        <h1 class="m-0 text-primary text-uppercase">Hotelvier</h1>
+                    </a>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row gx-0 bg-white d-none d-lg-flex">
+                        <div class="col-lg-7 px-5 text-start">
+                            <div class="h-100 d-inline-flex align-items-center py-2 me-4">
+                                <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                                <p class="mb-0">123 Nguyen Trung Truc, Da Nang</p>
+                            </div>
+                            <div class="h-100 d-inline-flex align-items-center py-2">
+                                <i class="fa fa-phone-alt text-primary me-2"></i>
+                                <p class="mb-0">+012 345 6789</p>
+                            </div>
+                        </div>
+                        <div sec:authorize="isAuthenticated()" class="col-lg-3 px-5 text-end">
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" th:text="${#authentication.name}"></a>
+                                <div class="dropdown-menu rounded-0 m-0" >
+                                    <a class="dropdown-item" href="#">Account</a>
+                                    <a class="dropdown-item" href="/user/orders">Order History</a>
+                                    <a class="dropdown-item" href="/process_logout">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div sec:authorize="!isAuthenticated()" class="col-lg-5 px-5 text-end">
+                            <div class="d-inline-flex align-items-center py-2">
+                                <a class="me-3" href="/user/login">Login<i class="fa fa-sign-in-alt ms-1"></i></a>
+                                <a class="me-3" href="/register">Register<i class="fa fa-user-plus ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
+                        <a href="/home" class="navbar-brand d-block d-lg-none">
+                            <h1 class="m-0 text-primary text-uppercase">Hotelvier</h1>
+                        </a>
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto py-0">
+                                <a href="/home" class="nav-item nav-link active">Home</a>
+                                <a href="#" class="nav-item nav-link">About</a>
+                                <a href="#" class="nav-item nav-link">Services</a>
+                                <div class="nav-item dropdown">
+                                    <a href="/rooms" class="nav-link dropdown-toggle">Rooms</a>
+                                    <div class="dropdown-menu rounded-0 m-0" >
+                                        <a th:each="type : ${nameList}" th:href="@{/rooms/type/{typeName}(typeName=${type})}"
+                                           class="dropdown-item" th:text="${type}"></a>
+                                    </div>
+                                </div>
+                                <a href="#" class="nav-link nav-item">Pages</a>
+                                <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            </div>
+                            <a href="/search" class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block">
+                                Book Now<i class="fa fa-arrow-right ms-3"></i></a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+
+
+        <!-- Page Header Start -->
+        <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/resources/img/carousel-1.jpg);">
+            <div class="container-fluid page-header-inner py-5">
+                <div class="container text-center pb-5">
+                    <h1 class="display-3 text-white mb-3 animated slideInDown" th:text="${roomType.name}+' '+${roomType.roomBedType.name}+' Bed'"></h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center text-uppercase">
+                            <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/rooms">Rooms</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page" th:text="${roomType.name}+' '+${roomType.roomBedType.name}+' Bed'"></li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- Booking Start -->
+        <div class="container-fluid booking pb-5 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container">
+                <div class="bg-white shadow" style="padding: 35px;">
+                    <form action="/search" method="get">
+                        <div class="row g-2">
+                            <div class="col-md-10">
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <div class="date input-group" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                   placeholder="Check in" name="startDatetime" id="datetime1"/>
+                                            <label for="datetime1" class="input-group-text">
+                                                <span class="fa fa-calendar-alt" ></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="date input-group" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                   placeholder="Check out" name="endDatetime" id="datetime2"/>
+                                            <label for="datetime2" class="input-group-text">
+                                                <span class="fa fa-calendar-alt" ></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-select" name="capacity">
+                                            <option selected value="0">People</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <!--                                    <div class="form-floating">-->
+                                        <select class="form-select" name="childs">
+                                            <option selected value="0">Childs</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                        </select>
+                                        <!--                                        <label for="select">People</label>-->
+                                        <!--                                    </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary w-100" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Booking End -->
+
+        <!-- Room Image Start -->
+        <div class="container-xxl testimonial wow zoomIn" data-wow-delay="0.1s" style="margin-bottom: 90px;">
+            <div class="container">
+                <div class="owl-carousel testimonial-carousel py-5">
+                    <th:block th:each="image: ${roomType.roomTypeImageEntities}">
+                        <div class="testimonial-item position-relative rounded overflow-hidden" style="padding: 0">
+                                <img class="img-fluid flex-shrink-0 rounded" th:src="@{${image.photo}}">
+                        </div>
+                    </th:block>
+<!--                    <div class="testimonial-item position-relative rounded overflow-hidden" style="padding: 0">-->
+<!--                        <img class="img-fluid flex-shrink-0 rounded" src="/resources/room-type-images/bed/1/room-3.jpg">-->
+<!--                    </div>-->
+<!--                    <div class="testimonial-item position-relative rounded overflow-hidden" style="padding: 0">-->
+<!--                        <img class="img-fluid flex-shrink-0 rounded" src="/resources/room-type-images/bed/1/room-3.jpg">-->
+<!--                    </div>-->
+
+                </div>
+            </div>
+        </div>
+        <!-- Room Image End -->
+
+<!--        Room Info Start-->
+        <div class="container-xxl">
+            <div class="container">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-8">
+                        <h2 class="text-primary mb-4 section-title text-start">Room Details</h2>
+                            <p class="mb-5 text-dark" th:text="${roomType.roomTypeDetail.content}"></p>
+                        <h2 class="text-primary mb-4 section-title text-start">Room Features</h2>
+                        <p class="text-dark"><i class="fas fa-chevron-right text-primary m-2"></i>TV :
+                            <span class="text-uppercase text-primary m-1"
+                                  th:text="${roomType.roomTypeDetail.tv} ? 'Yes':'No'"></span> </p>
+                        <p class="text-dark"><i class="fas fa-chevron-right text-primary m-2"></i>Hair Dryer :
+                            <span class="text-uppercase text-primary m-1"
+                                  th:text="${roomType.roomTypeDetail.hairDryer} ? 'Yes':'No'"></span> </p>
+                        <p class="text-dark"><i class="fas fa-chevron-right text-primary m-2"></i>Free Wifi :
+                            <span class="text-uppercase text-primary m-1"
+                                  th:text="${roomType.roomTypeDetail.freeWifi} ? 'Yes':'No'"></span> </p>
+                        <p class="text-dark"><i class="fas fa-chevron-right text-primary m-2"></i>Minibar :
+                            <span class="text-uppercase text-primary m-1"
+                                  th:text="${roomType.roomTypeDetail.minibar} ? 'Yes':'No'"></span> </p>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row g-3 pb-4">
+                            <div class="col-sm-6 wow fadeIn" data-wow-delay="0.1s">
+                                <div class="border rounded p-1">
+                                    <div class="border rounded text-center p-4">
+                                        <i class="fa fa-chart-area fa-2x text-primary mb-2"></i>
+                                        <h3 class="mb-1" data-toggle="counter-up" th:text="${roomType.roomTypeDetail.size}"></h3>
+                                        <p class="mb-0">Size</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 wow fadeIn" data-wow-delay="0.5s">
+                                <div class="border rounded p-1">
+                                    <div class="border rounded text-center p-4">
+                                        <i class="fa fa-bed fa-2x text-primary mb-2"></i>
+                                        <h3 class="mb-1 fadeIn" th:text="${roomType.roomBedType.name}"></h3>
+                                        <p class="mb-0">Bed Type</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 wow fadeIn" data-wow-delay="0.7s">
+                                <div class="border rounded p-1">
+                                    <div class="border rounded text-center p-4">
+                                        <i class="fa fa-users fa-2x text-primary mb-2"></i>
+                                        <h3 class="mb-1" data-toggle="counter-up" th:text="${roomType.roomBedType.capacity}"></h3>
+                                        <p class="mb-0">Guest</p>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <div class="col-sm-6 wow fadeIn" data-wow-delay="1s">-->
+<!--                                <div class="border rounded p-1">-->
+<!--                                    <div class="border rounded text-center p-4">-->
+<!--                                        <i class="fa fa-eye fa-2x text-primary mb-2"></i>-->
+<!--                                        <h3 class="mb-1 fadeIn" th:text="${roomType.roomTypeDetail.view}"></h3>-->
+<!--                                        <p class="mb-0">View</p>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        Room Info End-->
+
+        <!-- Room Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="text-center wow fadeInUp mb-4" data-wow-delay="0.1s">
+                    <h3 class="text-primary text-center section-title text-uppercase">Other Same Type</h3>
+                </div>
+                <div class="row g-4">
+                    <th:block th:each="type : ${roomTypeList}">
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="room-item shadow rounded overflow-hidden">
+                                <div class="position-relative">
+                                    <th:block th:each="image : ${type.roomTypeImageEntities}" th:switch="${image.name.toString()}">
+                                        <img class="img-fluid" th:case="'bed'" th:src="@{${image.photo}}" alt="">
+                                    </th:block>
+                                    <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4" th:text="'$' + ${type.pricePerNight} + '/Night'"></small>
+                                </div>
+                                <div class="p-4 mt-2">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h5 class="mb-0" th:text="${type.name}+' '+${type.roomBedType.name}+' Bed'"></h5>
+                                        <div class="ps-2">
+                                            <small class="fa fa-star text-primary"></small>
+                                            <small class="fa fa-star text-primary"></small>
+                                            <small class="fa fa-star text-primary"></small>
+                                            <small class="fa fa-star text-primary"></small>
+                                            <small class="fa fa-star text-primary"></small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <i class="fa fa-bed text-primary me-2"></i>
+                                        <small class="border-end me-3 pe-3" th:text="${type.roomBedType.capacity} + ' Guest'"></small>
+                                        <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>1 Bath</small>
+                                        <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
+                                    </div>
+                                    <p class="text-body mb-3" th:text="${type.description}"></p>
+                                    <div class="d-flex justify-content-between">
+                                        <a class="btn btn-sm btn-primary rounded py-2 px-4" th:href="@{/rooms/{roomTypeId}(roomTypeId=${type.id})}">View Detail</a>
+                                        <a class="btn btn-sm btn-dark rounded py-2 px-4" href="/search">Book Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <!-- Room End -->
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-light footer wow fadeIn mt-5" data-wow-delay="0.1s">
+            <div class="container pb-5">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="bg-primary rounded p-4">
+                            <a href="/home"><h1 class="text-white text-uppercase mb-3">Hotelvier</h1></a>
+                            <p class="text-white mb-0">
+                                Thank you for choosing Hotelvier for your stay.
+                                We are excited to have you stay with us and hope you have a comfortable and enjoyable visit.
+                                We hope that this is just the first of many visits and that you will feel at home with us.
+                                <!--                                <a class="text-dark fw-medium" href="https://htmlcodex.com/hotel-html-template-pro">Hotelvier</a>-->
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h6 class="section-title text-start text-primary text-uppercase mb-4">Contact</h6>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Nguyen Trung Truc, Da Nang</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>huadaivi@gmail.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12">
+                        <div class="row gy-5 g-4">
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Company</h6>
+                                <a class="btn btn-link" href="">About Us</a>
+                                <a class="btn btn-link" href="">Contact Us</a>
+                                <a class="btn btn-link" href="">Privacy Policy</a>
+                                <a class="btn btn-link" href="">Terms & Condition</a>
+                                <a class="btn btn-link" href="">Support</a>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
+                                <a class="btn btn-link" href="">Food & Restaurant</a>
+                                <a class="btn btn-link" href="">Spa & Fitness</a>
+                                <a class="btn btn-link" href="">Sports & Gaming</a>
+                                <a class="btn btn-link" href="">Event & Party</a>
+                                <a class="btn btn-link" href="">GYM & Yoga</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#">DVR</a>
+
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            <!--							Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>-->
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="">Home</a>
+                                <a href="">Cookies</a>
+                                <a href="">Help</a>
+                                <a href="">FQAs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/resources/lib/wow/wow.min.js"></script>
+    <script src="/resources/lib/easing/easing.min.js"></script>
+    <script src="/resources/lib/waypoints/waypoints.min.js"></script>
+    <script src="/resources/lib/counterup/counterup.min.js"></script>
+    <script src="/resources/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/resources/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="/resources/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="/resources/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="/resources/js/main.js"></script>
+
+    <!--    Date Time Picker-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script src="/resources/js/datetimepicker.js"></script>
+</body>
+
+</html>

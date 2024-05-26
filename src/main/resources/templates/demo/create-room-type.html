@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Room Type</title>
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+    <form action="/manager/room-type/create" method="post" th:object="${roomType}" enctype="multipart/form-data">
+        <label>Type Name:</label>
+        <select th:field="*{name}" required>
+            <th:block th:each="name :${nameList}" >
+                <option th:text="${name.toString()}" th:value="${name}"></option>
+            </th:block>
+        </select>
+        <label>Description:</label>
+        <textarea th:field="*{description}" required></textarea>
+        <label>Price/Night:</label>
+        <input type="number" step="any" th:field="*{pricePerNight}" required>
+        <label>Capacity:</label>
+        <input type="number" th:field="*{capacity}" required>
+        <label>Bed:</label>
+        <select th:field="*{bed}" required>
+            <th:block th:each="bed :${bedList}">
+                <option th:text="${bed.toString()}" th:value="${bed}"></option>
+            </th:block>
+        </select>
+        <label>Bed Picture:</label>
+        <input type="file" name="image" accept="image/png, image/jpeg, image/jpg" required>
+        <label>Picture description:</label>
+        <input type="text" name="des" required>
+        <input type="submit" value="Create">
+    </form>
+</div>
+
+</body>
+</html>

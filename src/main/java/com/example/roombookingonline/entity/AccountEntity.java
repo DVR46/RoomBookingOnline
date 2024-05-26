@@ -2,6 +2,7 @@ package com.example.roombookingonline.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,9 @@ public class AccountEntity {
     private String email;
     @OneToMany(mappedBy = "accountEntity")
     private List<OrderEntity> orderEntities;
+    private boolean active;
+    private boolean baned;
+    private LocalDateTime banedTime;
 
     public void setId(Long id) {
         this.id = id;
@@ -64,5 +68,49 @@ public class AccountEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<OrderEntity> getOrderEntities() {
+        return orderEntities;
+    }
+
+    public void setOrderEntities(List<OrderEntity> orderEntities) {
+        this.orderEntities = orderEntities;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isBaned() {
+        return baned;
+    }
+
+    public void setBaned(boolean baned) {
+        this.baned = baned;
+    }
+
+    public LocalDateTime getBanedTime() {
+        return banedTime;
+    }
+
+    public void setBanedTime(LocalDateTime banedTime) {
+        this.banedTime = banedTime;
+    }
+
+    public String getStatus(){
+        if(baned){
+            return "Baned";
+        }
+        else if(active){
+            return "Active";
+        }
+        else {
+            return "Inactive";
+        }
     }
 }

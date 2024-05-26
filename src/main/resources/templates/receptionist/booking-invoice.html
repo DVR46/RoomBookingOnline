@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Invoice</title>
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/resources/css/receptionist/css/invoice.css" rel="stylesheet">
+    <link href="//www.templatemonster.com/assets/css/demo-4b6e2689069ad40d972f.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container-fluid Billig-container shadow-sm">
+    <!-- Header -->
+    <header>
+        <div class="row align-items-center">
+            <div class="col-7 text-start mb-3 mb-sm-0"> <img id="logo" src="https://webartinfo.com/templatemonster/billig/assets/img/logo.png" title="Billig" alt="Billig"> </div>
+            <div class="col-5 text-end text-sm-right">
+                <h4 class="mb-0 text-uppercase">Invoice</h4>
+                <p class="mb-0" th:text="'Reservation Number - '+${roomBooking.reservationNumber}"></p>
+            </div>
+        </div>
+        <hr>
+    </header>
+    <!-- Main Content -->
+    <main>
+        <div class="row">
+            <div class="col-3 mb-3"> <strong>Guest Name:</strong><span th:text="${roomBooking.customers.get(0).name}"></span> </div>
+            <div class="col-9 mb-3 text-end row">
+                <div class="col-sm-6 p-0">
+                    <strong>Check In:</strong> <span th:text="${roomBooking.checkIn.format(dateTimeFormatter)}"></span>
+                </div>
+                <div class="col-sm-6 p-0">
+                    <strong>Check Out:</strong> <span th:text="${roomBooking.checkOut.format(dateTimeFormatter)}"></span>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-0">
+        <div class="row">
+            <div class="col-4">
+                <strong>Hotel Details:</strong>
+                <address>
+                    Hotelvier <br>
+                    1234 Nguyen Trung Truc, Da Nang<br>
+                </address>
+            </div>
+            <div class="col-8 text-end">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <strong>Start:</strong>
+                        <p th:text="${roomBooking.orderEntity.startDatetime.format(formatter)}"></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <strong>End:</strong>
+                        <p th:text="${roomBooking.orderEntity.endDatetime.format(formatter)}"></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <strong>Rooms:</strong>
+                        <p th:text="${roomBooking.orderEntity.roomOrderEntities.size()}"></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <strong>People:</strong>
+                        <p th:text="${roomBooking.customers.size()}"></p>
+                    </div>
+                    <div class="col-sm-4 p-0">
+                        <strong style="margin-right: calc(var(--bs-gutter-x) / 2)">Place On:</strong>
+                        <p th:text="${roomBooking.orderEntity.orderDate.format(dateTimeFormatter)}"></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <strong>Stay Time :</strong>
+                        <p th:text="${roomBooking.orderEntity.hoursDuration}+' hours'"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header p-0">
+                <table class="table mb-0">
+                    <thead>
+                    <tr>
+                        <td class="col-6 border-0"><strong>Description</strong></td>
+                        <td class="col-4 text-end border-0"><strong>Rate</strong></td>
+                        <td class="col-2 text-end border-0"><strong>Amount</strong></td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <tbody>
+                        <tr class="border-bottom">
+                            <td class="col-6 border-0"><strong>Room Charges</strong></td>
+                            <td class="col-4 text-end border-0"></td>
+                            <td class="col-2 text-end border-0" th:text="${roomBooking.orderEntity.roomAmount+'$'}"></td>
+                        </tr>
+                        <tr th:each="room : ${roomBooking.orderEntity.roomOrderEntities}">
+                            <td class="ps-4" th:text="${room.roomDetailEntities.roomEntity.roomTypeEntity.name}+' '+
+                            ${room.roomDetailEntities.roomEntity.roomTypeEntity.roomBedType.name}+' Bed'"></td>
+                            <td class="text-end" th:text="${room.adults}+' Adult, '+${room.childs}+' Children'"></td>
+                            <td class="text-end" th:text="${room.roomDetailEntities.roomEntity.roomTypeEntity.pricePerNight}
+                            *(${roomBooking.orderEntity.hoursDuration}/8.0)+'$'"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Other Charges</strong></td>
+                            <td class="text-end"></td>
+                            <td class="text-end" th:text="${roomBooking.orderEntity.serviceInvoiceEntity==null}?'0'
+                            :${roomBooking.orderEntity.serviceInvoiceEntity.totalAmount}+'$'"></td>
+                        </tr>
+                        <tr th:if="${roomBooking.orderEntity.roomsService}">
+                            <td class="ps-4">Room Service</td>
+                            <td class="text-end"></td>
+                            <td class="text-end" th:text="${roomBooking.orderEntity.roomServiceAmount}+'$'"></td>
+                        </tr>
+                        <tr th:if="${roomBooking.orderEntity.massageServices}">
+                            <td class="ps-4">Massage Service</td>
+                            <td class="text-end"></td>
+                            <td class="text-end" th:text="${roomBooking.orderEntity.massageServiceAmount}+'$'"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Promotional Code (One Time Discount)</strong></td>
+                            <td th:if="${roomBooking.orderEntity.couponEntity!=null}" class="text-end"
+                            th:text="${roomBooking.orderEntity.couponEntity.code}+' - '"><span class="text-1" th:text="${roomBooking.orderEntity.couponEntity.couponTypeEntity.discount}+'%'"></span></td>
+                            <td th:unless="${roomBooking.orderEntity.couponEntity!=null}" class="text-end"></td>
+                            <td class="text-end" th:text="${roomBooking.orderEntity.amountDiscount}"></td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <td colspan="2" class="bg-light-2 text-end"><strong>Sub Total:</strong></td>-->
+<!--                            <td class="bg-light-2 text-end">$300.00</td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td colspan="2" class="bg-light-2 text-end"><strong>Tax:</strong></td>-->
+<!--                            <td class="bg-light-2 text-end">$20.00</td>-->
+<!--                        </tr>-->
+                        <tr>
+                            <td colspan="2" class="bg-light-2 text-end border-0"><strong>Total:</strong></td>
+                            <td class="bg-light-2 text-end border-0" th:text="${roomBooking.orderEntity.amount}+'$'"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <p class="text-1 text-muted"><strong>Please Note:</strong> Amount payable is inclusive of central &amp; state goods &amp; services Tax act applicable slab rates. Please ask Hotel for Invoice at the time of check-out.</p>
+    </main>
+    <!-- Footer -->
+    <footer class="text-center">
+        <hr>
+        <p><strong class="text-5">Hotelvier.</strong><br>
+            1234 Nguyen Trung Truc, Da Nang<br>
+            Viet Nam.
+        </p>
+<!--        <hr>-->
+<!--        <p class="text-1"><strong>NOTE :</strong> This is computer generated receipt and does not require physical signature.</p>-->
+<!--        <div class="btn-group btn-group-sm d-print-none"> <a href="#" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-print">-->
+<!--        </i> Print</a> <a href="" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-download"></i> Download</a> </div>-->
+    </footer>
+</div>
+</body>
+</html>

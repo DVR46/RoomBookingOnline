@@ -1,6 +1,7 @@
 package com.example.roombookingonline.entity;
 
 import jakarta.persistence.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Table(name = "rooms")
@@ -8,11 +9,13 @@ public class RoomEntity {
     @Id
     @Column(name = "room_number")
     private Long roomNumber;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_type_id")
     private RoomTypeEntity roomTypeEntity;
+    @OneToOne(mappedBy = "roomEntity")
+    @JoinColumn(name = "room_detail_id")
+    private RoomDetailEntity roomDetailEntity;
     private boolean active;
-    private double pricePerNight;
 
     public Long getRoomNumber() {
         return roomNumber;
@@ -34,15 +37,16 @@ public class RoomEntity {
         return active;
     }
 
+    public RoomDetailEntity getRoomDetailEntity() {
+        return roomDetailEntity;
+    }
+
+    public void setRoomDetailEntity(RoomDetailEntity roomDetailEntity) {
+        this.roomDetailEntity = roomDetailEntity;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
     }
 
-    public double getPricePerNight() {
-        return pricePerNight;
-    }
-
-    public void setPricePerNight(double pricePerNight) {
-        this.pricePerNight = pricePerNight;
-    }
 }

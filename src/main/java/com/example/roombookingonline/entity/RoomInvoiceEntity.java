@@ -9,7 +9,6 @@ public class RoomInvoiceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "customer_name")
-    private String customerName;
     private String status;
     private double amount;
     @OneToOne
@@ -23,4 +22,5 @@ public class RoomInvoiceEntity {
     public Long getId() {
         return id;
     }
+
 }

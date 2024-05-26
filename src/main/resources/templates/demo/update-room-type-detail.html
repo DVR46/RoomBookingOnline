@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Room Type Detail</title>
+</head>
+<body>
+    <form action="/manager/room-type-detail/update" method="post" th:object="${roomTypeDetail}" enctype="multipart/form-data">
+        <input type="hidden" th:value="${roomType.id}" name="room-type-id">
+        <input type="hidden" th:field="*{id}">
+        <input type="text" th:value="${roomType.name} + ' ' + ${roomType.category}" readonly>
+        <label>Content: </label>
+        <textarea type="text" th:field="*{content}">
+        </textarea>
+        <label>View:</label>
+        <select th:field="*{view}" required>
+            <th:block th:each="view :${typeView}">
+                <option th:text="${view}" th:value="${view}"></option>
+            </th:block>
+        </select>
+        <label>Size:</label>
+        <input type="number" step="any" th:field="*{size}">
+        <input type="checkbox" th:field="*{tv}"><label>TV</label>
+        <input type="checkbox" th:field="*{hairDryer}"><label>Hair Dryer</label>
+        <input type="checkbox" th:field="*{freeWifi}"><label>Free WiFi</label>
+        <input type="checkbox" th:field="*{minibar}"><label>Minibar</label>
+        <label>Front Picture:</label>
+        <input type="file" accept="image/png, image/jpeg, image/jpg" name="frontPic">
+        <label>Description: </label>
+        <input type="text" name="frontDes">
+        <label>Back Picture:</label>
+        <input type="file" accept="image/png, image/jpeg, image/jpg" name="backPic">
+        <label>Description: </label>
+        <input type="text" name="backDes">
+        <label>Bath Picture:</label>
+        <input type="file" accept="image/png, image/jpeg, image/jpg" name="bathPic">
+        <label>Description: </label>
+        <input type="text" name="bathDes">
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>
