@@ -12,6 +12,7 @@ public class UserPrincipal implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    private boolean active;
     private boolean baned;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -29,7 +30,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return active;
     }
 
     @Override
@@ -74,5 +75,13 @@ public class UserPrincipal implements UserDetails {
 
     public void setBaned(boolean baned) {
         this.baned = baned;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

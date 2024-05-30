@@ -1,0 +1,11 @@
+
+payment:
+  vnPay:
+    url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
+    tmnCode: 'PGRQ2ZXJ'
+    secretKey: 'X6ZPYCTNOXM2UVLWSLKK80GEYZDMJY0I'
+    returnUrl: 'http://localhost:8080/user/booking/callback'
+    version: '2.1.0'
+    command: 'pay'
+    orderType: 'other'
+

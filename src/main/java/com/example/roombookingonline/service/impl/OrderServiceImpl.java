@@ -74,12 +74,12 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public double createMassageService(double massageServiceAmount, OrderEntity orderSaved){
-        RoomsServiceEntity roomsService = new RoomsServiceEntity();
-        roomsService.setStartDatetime(orderSaved.getStartDatetime());
-        roomsService.setEndDatetime(orderSaved.getEndDatetime());
-        roomsService.setOrderEntity(orderSaved);
-        roomsService.setAmount(massageServiceAmount);
-        roomsServiceRepository.save(roomsService);
+        MassageServiceEntity massageService = new MassageServiceEntity();
+        massageService.setStartDatetime(orderSaved.getStartDatetime());
+        massageService.setEndDatetime(orderSaved.getEndDatetime());
+        massageService.setOrderEntity(orderSaved);
+        massageService.setAmount(massageServiceAmount);
+        massageServiceRepository.save(massageService);
         return massageServiceAmount;
     }
     @Override
@@ -97,10 +97,10 @@ public class OrderServiceImpl implements OrderService {
         ServiceInvoiceEntity serviceInvoiceEntity = new ServiceInvoiceEntity();
         if(orderSaved.getServiceInvoiceEntity() != null){
             serviceInvoiceEntity = orderSaved.getServiceInvoiceEntity();
-            orderSaved.setAmount(orderSaved.getAmount() + serviceAmount);
-            orderRepository.save(orderSaved);
-            serviceAmount += orderSaved.getServiceInvoiceEntity().getTotalAmount();
+            serviceAmount += serviceInvoiceEntity.getTotalAmount();
         }
+        orderSaved.setAmount(orderSaved.getAmount() + serviceAmount);
+        orderRepository.save(orderSaved);
         serviceInvoiceEntity.setOrderEntity(orderSaved);
         serviceInvoiceEntity.setTotalAmount(serviceAmount);
         serviceInvoiceRepository.save(serviceInvoiceEntity);

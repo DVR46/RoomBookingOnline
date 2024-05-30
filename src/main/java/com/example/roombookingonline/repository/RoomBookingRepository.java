@@ -14,6 +14,6 @@ public interface RoomBookingRepository extends JpaRepository<RoomBookingEntity, 
     List<RoomBookingEntity> findOrderCheckIn();
 
     @Query(value = "from RoomBookingEntity rb " +
-            "where rb.orderEntity.active == false order by rb.checkOut desc ")
+            "where rb.orderEntity.active = false order by rb.checkOut ")
     List<RoomBookingEntity> findBookingHistory();
 }

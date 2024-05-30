@@ -113,4 +113,12 @@ public class AccountEntity {
             return "Inactive";
         }
     }
+
+    public double getTotalOrderAmount(){
+        double total = 0;
+        for(OrderEntity orderEntity : orderEntities){
+            total += orderEntity.getAmount();
+        }
+        return total;
+    }
 }

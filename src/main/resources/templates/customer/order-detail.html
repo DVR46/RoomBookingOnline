@@ -64,7 +64,7 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" th:text="${#authentication.name}"></a>
                             <div class="dropdown-menu rounded-0 m-0" >
-                                <a class="dropdown-item" href="#">Account</a>
+                                <a class="dropdown-item" href="/user/profile">Account Profile</a>
                                 <a class="dropdown-item" href="/user/orders">Order History</a>
                                 <a class="dropdown-item" href="/process_logout">Logout</a>
                             </div>
@@ -124,7 +124,7 @@
         <div class="container-lg py-5">
             <div class="container row">
                 <div class="booking-form-body room-details mb-3 col-lg-9 col-md-12">
-                    <h3 class="mb-20 text-primary">Booking Details</h3>
+<!--                    <h3 class="mb-20 text-primary">Order Details</h3>-->
                     <p>Place On: <strong th:text="${order.orderDate.format(dateTimeFormatter)}"></strong></p>
                     <p>Start: <strong th:text="${order.startDatetime.format(formatter)}"></strong></p>
                     <p>End: <strong th:text="${order.endDatetime.format(formatter)}"></strong></p>
@@ -132,8 +132,10 @@
                     <p>Adults: <strong th:text="${order.adults}"></strong></p>
                     <p>Children: <strong th:text="${order.childs}"></strong></p>
                     <p>Status: <strong th:text="${order.status}"></strong></p>
-                    <p>Check In: <strong th:text="${order.roomBookingEntity==null}?'':${order.roomBookingEntity.checkIn.format(dateTimeFormatter)}"></strong></p>
-                    <p>Check Out: <strong th:text="${order.roomBookingEntity==null}?'':${order.roomBookingEntity.checkOut.format(dateTimeFormatter)}"></strong></p>
+                    <p th:if="${order.roomBookingEntity!=null}">Check In:
+                        <strong th:text="${order.roomBookingEntity.checkIn.format(dateTimeFormatter)}"></strong></p>
+                    <p th:if="${order.roomBookingEntity!=null&&order.roomBookingEntity.checkOut!=null}">Check Out:
+                        <strong th:text="${order.roomBookingEntity.checkOut.format(dateTimeFormatter)}"></strong></p>
                 </div>
                 <div class="col-lg-3 col-md-12">
                     <div class="position-relative">
@@ -216,7 +218,7 @@
                         </div>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                             when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                    <form action="/user/order/cancel" method="post" th:hidden="${now > order.startDatetime.minusDays(3)}">
+                    <form action="/user/order/cancel" method="post" th:if="${now < order.startDatetime.minusDays(3)&&order.amountRefunds==0}">
                         <input type="hidden" th:value="${order.id}" name="orderId">
                         <button class="btn btn-danger btn-sm rounded-2 py-2 mb-3" type="submit">Cancel & Refunds</button>
                     </form>
@@ -224,49 +226,24 @@
                        class="btn btn-success btn-sm rounded-2 py-2 px-5 mb-3" th:href="@{/user/order/billing(orderId=${order.id})}">Bill</a>
                     <a th:unless="${order.active}" class="btn btn-danger btn-sm rounded-2 py-2 px-5 mb-3" th:href="@{/user/order/delete(orderId=${order.id})}">Delete</a>
                 </div>
-<!--                <div class="booking-form-body room-details">-->
-<!--                    <h3 class="mb-20">Your Information</h3>-->
-<!--                    <div class="room-booking-form p-0">-->
-
-<!--                        <p class="mb-20">Required fields are followed by *</a></p>-->
-<!--                        <form>-->
-<!--                            <div class="form-group input-group input-group-two mb-20">-->
-<!--                                <label>First Name <span class="required">*</span></label>-->
-<!--                                <input type="text" name="#" placeholder="First Name" required>-->
-<!--                            </div>-->
-<!--                            <div class="form-group input-group input-group-two mb-20">-->
-<!--                                <label>Last Name <span class="required">*</span></label>-->
-<!--                                <input type="text" name="#" placeholder="Last Name" required>-->
-<!--                            </div>-->
-<!--                            <div class="form-group input-group input-group-two mb-20">-->
-<!--                                <label>Email <span class="required">*</span></label>-->
-<!--                                <input type="email" name="#" placeholder="Email" required>-->
-<!--                            </div>-->
-<!--                            <div class="form-group input-group input-group-two mb-20">-->
-<!--                                <label>Phone <span class="required">*</span></label>-->
-<!--                                <input type="email" name="#" placeholder="Phone" required>-->
-<!--                            </div>-->
-<!--                            <div class="form-group input-group input-group-two left-icon mb-20">-->
-<!--                                <label>Country of residence <span class="required">*</span></label>-->
-<!--                                <select required>-->
-<!--                                    <option selected>&#45;&#45;Select&#45;&#45;</option>-->
-<!--                                    <option>Country 01</option>-->
-<!--                                    <option>Country 02</option>-->
-<!--                                    <option>Country 03</option>-->
-<!--                                    <option>Country 04</option>-->
-<!--                                    <option>Country 05</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="form-group mb-0">-->
-<!--                                <label>Notes</label>-->
-<!--                                <textarea rows="5" placeholder="Write Something..."></textarea>-->
-<!--                            </div>-->
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
         </div>
     </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/resources/lib/wow/wow.min.js"></script>
+    <script src="/resources/lib/easing/easing.min.js"></script>
+    <script src="/resources/lib/waypoints/waypoints.min.js"></script>
+    <script src="/resources/lib/counterup/counterup.min.js"></script>
+    <script src="/resources/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/resources/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="/resources/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="/resources/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!--     Template Javascript -->
+    <script src="/resources/js/main.js"></script>
 </div>
 </body>
 </html>

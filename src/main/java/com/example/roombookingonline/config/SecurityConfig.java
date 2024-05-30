@@ -123,12 +123,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a ->{
-                   a.requestMatchers("/home", "/rooms/**","/search", "/booking-cart/**","/manager/login", "/receptionist/login",
+                   a.requestMatchers("/","/home", "/rooms/**","/search", "/booking-cart/**","/manager/login", "/receptionist/login",
                                    "/register", "/user/login", "/resources/**")
                            .permitAll()
                            .requestMatchers("/manager/**").hasRole("MANAGER")
                            .requestMatchers("/receptionist/**").hasRole("RECEPTIONIST")
-                           .requestMatchers("/user/**").hasRole("CUSTOMER")
+                           .requestMatchers("/user/**", "/payment/**").hasRole("CUSTOMER")
                            .anyRequest().authenticated();
                 }).formLogin(formLogin ->{
                         formLogin.loginPage("/user/login")

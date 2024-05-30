@@ -15,11 +15,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerEntity> getAllCustomer(){
-        return customerRepository.findAll();
+        return customerRepository.findAllByNameIsNotEmpty();
     }
 
     @Override
     public CustomerEntity findById(Long id){
         return customerRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public void update(CustomerEntity customerEntity) {
+        customerRepository.save(customerEntity);
     }
 }

@@ -14,9 +14,13 @@ public interface BookingService {
 
     void checkIn(Long bookingId);
 
+    void checkedIn(Long bookingId);
+
     RoomBookingEntity checkOut(Long bookingId);
 
     RoomBookingEntity findById(Long id);
 
-    List<RoomBookingEntity> getAll();
+    List<RoomBookingEntity> getBookingHistory();
+
+    void updateCustomer(RoomBookingEntity roomBooking);
 }

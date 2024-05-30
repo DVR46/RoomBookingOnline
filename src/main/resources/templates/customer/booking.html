@@ -64,7 +64,7 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" th:text="${#authentication.name}"></a>
                                 <div class="dropdown-menu rounded-0 m-0" >
-                                    <a class="dropdown-item" href="#">Account</a>
+                                    <a class="dropdown-item" href="/user/profile">Account Profile</a>
                                     <a class="dropdown-item" href="/user/orders">Order History</a>
                                     <a class="dropdown-item" href="/process_logout">Logout</a>
                                 </div>
@@ -170,7 +170,7 @@
                                     <p th:text="${(coupon == '' or couponEntity.code != null )? '' : 'Coupon Invalid'}" class="text-danger" style="margin: 0"></p>
                                 </div>
                             </form>
-                            <form action="/user/booking/process" method="post" th:object="${order}">
+                            <form action="/user/booking/process" method="get" th:object="${order}">
                                 <div class="row g-3">
 <!--                                    <div class="col-md-6">-->
 <!--                                        <div class="form-floating date" id="date3" data-target-input="nearest">-->
@@ -226,14 +226,14 @@
                                         <div class="form-floating">
                                             <input type="number" class="form-control" id="roomPrice"
                                                    th:value="${roomAmount}" readonly>
-                                            <label for="roomPrice">Room Amount</label>
+                                            <label for="roomPrice">Room Amount($)</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="number" class="form-control" id="priceDiscount"
                                                    th:value="${amountDiscount}" readonly>
-                                            <label for="priceDiscount">Discount Amount</label>
+                                            <label for="priceDiscount">Discount Amount($)</label>
                                         </div>
                                     </div>
 <!--                                    <input type="hidden" th:field="*{amount}" th:value="${roomAmount} - ${amountDiscount}">-->
@@ -241,7 +241,7 @@
                                         <div class="form-floating">
                                             <input type="number" class="form-control" id="amount"
                                                    name="amount" th:value="${roomAmount.doubleValue()}-${amountDiscount.doubleValue()}" readonly>
-                                            <label for="amount">Total Amount</label>
+                                            <label for="amount">Total Amount($)</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -255,7 +255,7 @@
                                         <div class="form-floating" id="roomServiceAmount" style="display: none">
                                             <input type="number" class="form-control" id="roomsAmount"
                                                    th:value="${roomServiceAmount}" readonly>
-                                            <label>Rooms Service</label>
+                                            <label>Rooms Service($)</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -269,7 +269,7 @@
                                         <div class="form-floating" id="massageServiceAmount" style="display: none">
                                             <input type="number" class="form-control" id="massageAmount"
                                                    th:value="${massageServiceAmount}" readonly>
-                                            <label>Massage Service</label>
+                                            <label>Massage Service($)</label>
                                         </div>
                                     </div>
 <!--                                    <div class="col-md-6">-->

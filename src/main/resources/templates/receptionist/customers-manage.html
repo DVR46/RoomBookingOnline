@@ -14,7 +14,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Booking Manage</title>
+    <title>Customer Manage</title>
 
     <meta name="description" content="" />
 
@@ -268,60 +268,50 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Receptionist/ </span>Booking Manage</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Receptionist/ </span>Booking History</h4>
 
               <div class="card">
-                <h5 class="card-header" th:text="${#dates.createToday()}"></h5>
                 <div class="card-body">
                   <div class="table-responsive text-nowrap" style="padding-bottom: 10rem">
                     <table class="table" id="example">
                       <thead>
                       <tr>
-                        <th>Reservation</th>
-                        <th>Order ID</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Check In</th>
-                        <th>Check Out</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th> ID </th>
+                        <th> Name </th>
+                        <th> ID Card No </th>
+                        <th> Age </th>
+                        <th> Address </th>
+                        <th> No Of Booking </th>
+                        <th> Action </th>
                       </tr>
                       </thead>
-                      <tbody class="table-border-bottom-0">
-                      <tr th:each="booking, i : ${bookingList}">
-                        <td><strong th:text="${booking.reservationNumber}"></strong></td>
-                        <td th:text="${booking.orderEntity.id}"></td>
-                        <td th:text="${booking.orderEntity.startDatetime}"></td>
-                        <td th:text="${booking.orderEntity.endDatetime}"></td>
-                        <td th:text="${booking.checkIn}"></td>
-                        <td th:text="${booking.checkOut==null}?'':${booking.checkOut}"></td>
-                        <td class="text-uppercase text-primary me-1" th:text="${booking.orderEntity.status}"></td>
+                      <tbody>
+                      <tr th:each="cus:${customerList}">
+                        <td th:text="${cus.id}"></td>
+                        <td th:text="${cus.name}"></td>
+                        <td th:text="${cus.idCartNo}"></td>
+                        <td th:text="${cus.age}"></td>
+                        <td th:text="${cus.address}"></td>
+                        <td th:text="${cus.roomBookingEntities.size()}"></td>
                         <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <button class="dropdown-item " th:disabled="${!booking.orderEntity.checkRoomIsVacant()}">
-                                <a th:href="@{/receptionist/check-in(bookingId=${booking.reservationNumber})}" style="display: block"
-                                  th:class="${booking.orderEntity.checkRoomIsVacant()}?'text-success':'text-secondary'">
-                                  <i class="bx bx-edit-alt me-1"></i> Check In</a>
-                                </button>
-                              <button class="dropdown-item" th:disabled="${!booking.orderEntity.checkRoomIsReady()}">
-                                <a th:href="@{/receptionist/checked-in(bookingId=${booking.reservationNumber})}" style="display: block"
-                                   th:class="${booking.orderEntity.checkRoomIsReady()}?'text-primary':'text-secondary'">
-                                  <i class="bx bx-edit-alt me-1"></i> Checked In</a>
-                                </button>
-                              <button class="dropdown-item" th:disabled="${booking.orderEntity.status == 'Staying'}?'false':'true'">
-                                <a target="_blank" th:href="@{/receptionist/check-out(bookingId=${booking.reservationNumber})}" style="display: block"
-                                   th:class="${booking.orderEntity.status == 'Staying'}?'text-danger':'text-secondary'">
-                                  <i class="bx bx-edit-alt me-1"></i> Check Out</a>
-                                </button>
-                              <a class="dropdown-item text-facebook"
-                                 th:href="@{/receptionist/booking/detail(bookingId=${booking.reservationNumber})}">
-                                <i class="bx bx-detail me-1"></i>View Detail</a>
-                            </div>
-                          </div>
+                          <a class="dropdown-item text-success" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                             th:data-id="${cus.id}" th:data-name="${cus.name}" th:data-idCard="${cus.idCartNo}"
+                             th:data-age="${cus.age}" th:data-address="${cus.address}">
+                            <i class="bx bx-edit-alt mr-2" style="font-size: 14px"></i>Update</a>
+<!--                          <div class="dropdown">-->
+<!--                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-toggle="dropdown" style="color: #b9b4ac;">-->
+<!--                              <i class="bx bx-dots-vertical-rounded" style="font-size: 2em"></i>-->
+<!--                            </button>-->
+<!--                            <div class="dropdown-menu navbar-dropdown">-->
+<!--&lt;!&ndash;                              <a class="dropdown-item text-primary"&ndash;&gt;-->
+<!--&lt;!&ndash;                                 th:href="@{/receptionist/customer/detail/{customerId}(customerId=${cus.id})}" target="_blank">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <i class="bx bx-edit-alt mr-2" style="font-size: 14px;cursor: pointer"></i>View Detail</a>&ndash;&gt;-->
+<!--                              <a class="dropdown-item text-success" style="cursor: pointer" data-toggle="modal" data-target="#exampleModal"-->
+<!--                                 th:data-id="${cus.id}" th:data-name="${cus.name}" th:data-idCard="${cus.idCartNo}"-->
+<!--                                 th:data-age="${cus.age}" th:data-address="${cus.address}">-->
+<!--                                <i class="bx bx-edit-alt mr-2" style="font-size: 14px"></i>Update</a>-->
+<!--                            </div>-->
+<!--                          </div>-->
                         </td>
                       </tr>
                       </tbody>
@@ -334,10 +324,54 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>
                       </tr>
                       </tfoot>
                     </table>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalTitle">Update Customer</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <form action="/receptionist/customer/update" method="post">
+                            <div class="modal-body">
+                              <div class="form-group">
+                                <label for="id-update">ID</label>
+                                <input type="number" class="form-control" id="id-update"
+                                       th:field="*{customer.id}" readonly>
+                              </div>
+                              <div class="form-group">
+                                <label for="name-update">Name</label>
+                                <input type="text" class="form-control" id="name-update"
+                                       th:field="*{customer.name}" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="idCard-update">ID Card No</label>
+                                <input type="number" class="form-control" id="idCard-update" step="1"
+                                       th:field="*{customer.idCartNo}" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="age-update">Age</label>
+                                <input type="number" class="form-control" id="age-update" step="1" min="0"
+                                       th:field="*{customer.age}" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="address-update">Address</label>
+                                <input type="text" class="form-control" id="address-update"
+                                       th:field="*{customer.address}">
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -358,6 +392,7 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+<!--    <script src="/resources/css/manager/vendors/js/vendor.bundle.base.js"></script>-->
     <script src="/resources/css/receptionist/vendor/libs/jquery/jquery.js"></script>
     <script src="/resources/css/receptionist/vendor/libs/popper/popper.js"></script>
     <script src="/resources/css/receptionist/vendor/js/bootstrap.js"></script>
@@ -375,7 +410,27 @@
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
-    <script src="/resources/css/receptionist/js/datatables-booking-list.js"></script>
+    <script src="/resources/css/manager/js/datatables-customer-manage.js"></script>
+
+    <script>
+      $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+      })
+
+      $('#exampleModal').on('show.bs.modal', function (event) {
+        let id = $(event.relatedTarget).data('id')
+        let name = $(event.relatedTarget).data('name')
+        let age = $(event.relatedTarget).data('age')
+        let idCard = $(event.relatedTarget).data('idcard')
+        let address = $(event.relatedTarget).data('address')
+
+        $(this).find('.modal-body #id-update').val(id)
+        $(this).find('.modal-body #name-update').val(name)
+        $(this).find('.modal-body #age-update').val(age)
+        $(this).find('.modal-body #idCard-update').val(idCard)
+        $(this).find('.modal-body #address-update').val(address)
+      })
+    </script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

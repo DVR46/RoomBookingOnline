@@ -146,15 +146,15 @@
                     <div class="col-lg-6">
                         <div class="wow fadeInUp" data-wow-delay="0.2s">
                             <div th:if="${param.error}">
-                                <p style="color: red">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+                                <p style="color: red" th:text="${error}"></p>
                             </div>
                             <form action="/process_login" method="post">
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" id="username" placeholder="Username"
+                                            <input type="email" class="form-control" id="username" placeholder="Username"
                                                    name="username" required autofocus>
-                                            <label for="username">Username</label>
+                                            <label for="username">Email</label>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

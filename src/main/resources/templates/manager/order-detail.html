@@ -43,22 +43,29 @@
     <div class="container-fluid bg-white">
         <div class="container-lg py-5">
             <div class="container row">
-                <div class="booking-form-body room-details mb-3 col-lg-9 col-md-12">
-                    <h3 class="mb-20 text-primary">Order Details</h3>
+                <div class="booking-form-body room-details mb-3 col-lg-8 col-md-12">
+                    <h3 class="mb-20 text-primary">Order Information</h3>
                     <p>Place On: <strong th:text="${order.orderDate.format(dateTimeFormatter)}"></strong></p>
                     <p>Start: <strong th:text="${order.startDatetime.format(formatter)}"></strong></p>
                     <p>End: <strong th:text="${order.endDatetime.format(formatter)}"></strong></p>
                     <p>Rooms: <strong th:text="${order.roomOrderEntities.size()}"></strong></p>
+                    <p>Rooms Number: <strong th:each="room : ${order.roomOrderEntities}"
+                                           th:text="${room.roomDetailEntities.roomEntity.roomNumber}+' - '"></strong></p>
                     <p>Adults: <strong th:text="${order.adults}"></strong></p>
                     <p>Children: <strong th:text="${order.childs}"></strong></p>
                     <p>Status: <strong th:text="${order.status}"></strong></p>
-                    <p>Check In: <strong th:text="${order.roomBookingEntity==null}?'':${order.roomBookingEntity.checkIn.format(dateTimeFormatter)}"></strong></p>
-                    <p>Check Out: <strong th:text="${order.roomBookingEntity==null}?'':${order.roomBookingEntity.checkOut.format(dateTimeFormatter)}"></strong></p>
+                    <p th:if="${order.roomBookingEntity!=null}">Check In:
+                        <strong th:text="${order.roomBookingEntity.checkIn.format(dateTimeFormatter)}"></strong></p>
+                    <p th:if="${order.roomBookingEntity!=null&&order.roomBookingEntity.checkOut!=null}">Check Out:
+                        <strong th:text="${order.roomBookingEntity.checkOut.format(dateTimeFormatter)}"></strong></p>
                 </div>
-                <div class="col-lg-3 col-md-12">
-                    <div class="position-relative">
-                        <img th:src="@{${order.getQR()}}" style="width: 100%">
-                    </div>
+                <div class="col-lg-4 col-md-12">
+                    <h3 class="mb-20 text-primary">Account Information</h3>
+                    <p>Account ID: <strong th:text="${order.accountEntity.id}"></strong></p>
+                    <p>Username: <strong th:text="${order.accountEntity.username}"></strong></p>
+                    <p>Email: <strong th:text="${order.accountEntity.email}"></strong></p>
+                    <p>Phone: <strong th:text="${order.accountEntity.phone}"></strong></p>
+                    <p>Status: <strong th:text="${order.accountEntity.status}"></strong></p>
                 </div>
                 <div class="booking-form-body room-details mb-45">
                         <h4 class="mb-20 text-primary">Price Breakdown</h4>
@@ -90,8 +97,7 @@
                                         <tr>
                                             <th>Room Type Applies</th>
                                             <th:block th:with="roomType=${order.couponEntity.couponTypeEntity.roomTypeEntity}">
-                                                <td><a th:text="${roomType.roomTypeDetail.view}+' '+${roomType.name}+
-                                            ' ('+${roomType.bed}+' Bed, '+${roomType.capacity}+' Sleeps)'"></a></td>
+                                                <td><a th:text="${roomType.name}+' '+${roomType.roomBedType.name}+' Bed'"></a></td>
                                             </th:block>
                                         </tr>
                                         <tr>
@@ -110,8 +116,9 @@
                                 </tr>
                                 <th:block th:each="roomOrder: ${order.roomOrderEntities}">
                                     <tr>
-                                        <th><strong th:text="${roomOrder.roomDetailEntities.roomEntity.roomTypeEntity.roomTypeDetail.view}+' '+${roomOrder.roomDetailEntities.roomEntity.roomTypeEntity.name}"></strong></th>
-                                        <td><strong th:text="${roomOrder.roomDetailEntities.roomEntity.roomTypeEntity.pricePerNight}*(${duration}/8.0)+'$'"></strong></td>
+                                        <th><strong th:text="${roomOrder.roomDetailEntities.roomEntity.roomTypeEntity.name}
+                                        +' '+${roomOrder.roomDetailEntities.roomEntity.roomTypeEntity.roomBedType.name}+' Bed'"></strong></th>
+                                        <td><strong th:text="${roomOrder.roomDetailEntities.roomEntity.roomTypeEntity.pricePerNight}*(${order.hoursDuration}/8.0)+'$'"></strong></td>
                                     </tr>
                                     <tr>
                                         <th>Adults</th>
@@ -135,10 +142,6 @@
                         </div>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                             when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                    <form action="/user/order/cancel" method="post" th:hidden="${now > order.startDatetime.minusDays(3)}">
-                        <input type="hidden" th:value="${order.id}" name="orderId">
-                        <button class="btn btn-danger btn-sm rounded-2 py-2 mb-3" type="submit">Cancel & Refunds</button>
-                    </form>
                     <a th:if="${order.roomBookingEntity != null && order.roomBookingEntity.checkOut!=null}" class="btn btn-success btn-sm rounded-2 py-2 px-5 mb-3" th:href="@{/user/order/billing(orderId=${order.id})}">Bill</a>
                 </div>
             </div>

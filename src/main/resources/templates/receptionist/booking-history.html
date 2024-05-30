@@ -145,6 +145,12 @@
                 <div data-i18n="Boxicons">Booking History</div>
               </a>
             </li>
+            <li class="menu-item">
+              <a href="/receptionist/customers" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-crown"></i>
+                <div data-i18n="Boxicons">Customer Manage</div>
+              </a>
+            </li>
           </ul>
         </aside>
         <!-- / Menu -->
@@ -270,37 +276,37 @@
                     <table class="table" id="example">
                       <thead>
                       <tr>
-                        <th>Ordinal No</th>
                         <th>Reservation</th>
+                        <th>Order ID</th>
                         <th>Start</th>
                         <th>End</th>
                         <th>Check In</th>
                         <th>Check Out</th>
-                        <th>Status</th>
+                        <th>No of Customer</th>
                         <th>Action</th>
                       </tr>
                       </thead>
                       <tbody class="table-border-bottom-0">
                       <tr th:each="booking, i : ${bookingList}">
-                        <td th:text="${i.index+1}"></td>
                         <td><strong th:text="${booking.reservationNumber}"></strong></td>
+                        <td th:text="${booking.orderEntity.id}"></td>
                         <td th:text="${booking.orderEntity.startDatetime}"></td>
                         <td th:text="${booking.orderEntity.endDatetime}"></td>
                         <td th:text="${booking.checkIn}"></td>
                         <td th:text="${booking.checkOut==null}?'':${booking.checkOut}"></td>
-                        <td class="text-uppercase text-primary me-1" th:text="${booking.orderEntity.status}"></td>
+                        <td th:text="${booking.customers.size()}"></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" th:href="@{/receptionist/check-in(bookingId=${booking.reservationNumber})}" th:if="${booking.orderEntity.status == 'Check in'}">
-                                <i class="bx bx-edit-alt me-1"></i> Check In</a>
-                              <a class="dropdown-item" th:href="@{/receptionist/check-out(bookingId=${booking.reservationNumber})}" th:if="${booking.orderEntity.status == 'Staying'}">
-                                <i class="bx bx-edit-alt me-1"></i> Check Out</a>
-                              <a class="dropdown-item" th:href="@{/receptionist/billing(bookingId=${booking.reservationNumber})}">
-                                <i class="bx bx-trash me-1"></i> Export Bill</a>
+                              <a class="dropdown-item"
+                                 th:href="@{/receptionist/booking/detail(bookingId=${booking.reservationNumber})}">
+                                <i class="bx bx-detail me-1"></i>View Detail</a>
+                              <a class="dropdown-item" target="_blank"
+                                 th:href="@{/receptionist/billing(bookingId=${booking.reservationNumber})}">
+                                <i class="bx bx-export me-1"></i> Export Bill</a>
                             </div>
                           </div>
                         </td>
@@ -355,7 +361,8 @@
 <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-    <script src="/resources/css/receptionist/js/datatables-booking-list.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
+    <script src="/resources/css/receptionist/js/datatables-booking-history.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

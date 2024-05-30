@@ -32,6 +32,8 @@
     <link href="/resources/css/style.css" rel="stylesheet">
 
     <link href="/resources/css/personal/home.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>
 
 <body>
@@ -132,46 +134,47 @@
                             <div class="col-md-10">
                                 <div class="row g-2">
                                     <div class="col-md-4">
-                                        <div class="date input-group" data-target-input="nearest">
+                                        <div class="date input-group form-floating" data-target-input="nearest">
                                             <input type="text" class="form-control datetimepicker-input"
                                                    placeholder="Check in" name="startDatetime" id="datetime1"/>
-                                            <label for="datetime1" class="input-group-text">
+                                            <div class="input-group-text">
                                                 <span class="fa fa-calendar-alt" ></span>
-                                            </label>
+                                            </div>
+                                            <label for="datetime1">Check In</label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="date input-group" data-target-input="nearest">
+                                        <div class="date input-group form-floating" data-target-input="nearest">
                                             <input type="text" class="form-control datetimepicker-input"
                                                    placeholder="Check out" name="endDatetime" id="datetime2"/>
-                                            <label for="datetime2" class="input-group-text">
+                                            <div class="input-group-text">
                                                 <span class="fa fa-calendar-alt" ></span>
-                                            </label>
+                                            </div>
+                                            <label for="datetime2">Check Out</label>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <select class="form-select" name="capacity">
-                                            <option selected value="0">People</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                        </select>
+                                        <div class="form-floating">
+                                            <select class="form-select" name="adults" id="select1">
+                                                <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i}">
+                                                </option>
+                                            </select>
+                                            <label for="select1">Adults</label>
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <!--                                    <div class="form-floating">-->
-                                        <select class="form-select" name="childs">
-                                            <option selected value="0">Childs</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                        </select>
-                                        <!--                                        <label for="select">People</label>-->
-                                        <!--                                    </div>-->
+                                        <div class="form-floating">
+                                            <select class="form-select" name="childs" id="select2">
+                                                <option th:each="i : ${#numbers.sequence(0, 5)}" th:value="${i}" th:text="${i}">
+                                                </option>
+                                            </select>
+                                            <label for="select2">Childs</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-primary w-100" type="submit">Search</button>
+                                <button class="btn btn-primary w-100 py-3" type="submit">Search</button>
                             </div>
                         </div>
                     </form>

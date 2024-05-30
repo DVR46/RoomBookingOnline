@@ -12,7 +12,7 @@ public class CustomerEntity {
     private Long id;
     @ManyToMany(mappedBy = "customers")
     private List<RoomBookingEntity> roomBookingEntities;
-    @Column(name = "id_cart_no")
+    @Column(name = "id_cart_no", unique = true)
     private Long idCartNo;
     private String name;
     private int age;

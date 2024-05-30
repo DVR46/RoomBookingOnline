@@ -1,9 +1,13 @@
 package com.example.roombookingonline.controller;
 
 import com.example.roombookingonline.convertor.DateTimeConvertor;
+import com.example.roombookingonline.domain.AccountModel;
 import com.example.roombookingonline.entity.*;
+import com.example.roombookingonline.exception.FieldMissMatchException;
 import com.example.roombookingonline.repository.RoomBedTypeRepository;
+import com.example.roombookingonline.security.UserPrincipal;
 import com.example.roombookingonline.service.*;
+import com.example.roombookingonline.ulti.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -208,14 +212,21 @@ public class ManagerController {
     public String showCustomersPage(Model model){
         List<CustomerEntity> customerList = customerService.getAllCustomer();
         model.addAttribute("customerList", customerList);
+        model.addAttribute("customer", new CustomerEntity());
         return "manager/customers-manage";
     }
 
-    @GetMapping("/customer/{customerId}")
+    @GetMapping("/customer/detail/{customerId}")
     public String showCustomer(Model model, @PathVariable(name = "customerId")Long customerId){
         CustomerEntity customer = customerService.findById(customerId);
         model.addAttribute("customer", customer);
         return "manager/customer-detail";
+    }
+
+    @PostMapping("/customer/update")
+    public String updateCustomer(@ModelAttribute("customer")CustomerEntity customerEntity){
+        customerService.update(customerEntity);
+        return "redirect:/manager/customers";
     }
 
     @GetMapping("/account")
@@ -223,6 +234,21 @@ public class ManagerController {
         List<AccountEntity> accountList = accountService.findAll();
         model.addAttribute("accountList", accountList);
         return "manager/account-manage";
+    }
+
+    @GetMapping("/account/detail/{accountId}")
+    public String showAccountDetailPage(@PathVariable("accountId")Long accountId, Model model){
+        UserPrincipal user = SecurityUtil.currentUser();
+        AccountEntity account = accountService.findById(accountId);
+        model.addAttribute("account", account);
+        model.addAttribute("currentUser", user);
+        return "manager/account-detail";
+    }
+
+    @PostMapping("/account/update")
+    public String updateProfile(@ModelAttribute("account")AccountEntity accountEntity){
+        accountService.updateAccount(accountEntity);
+        return "redirect:/manager/account/detail/"+accountEntity.getId();
     }
 
     @PostMapping("/account/ban")
@@ -235,6 +261,18 @@ public class ManagerController {
     @GetMapping("/account/unban/{accountId}")
     public String unbanAccount(Model model, @PathVariable(name = "accountId")Long accountId){
         accountService.unbanAccount(accountId);
+        return "redirect:/manager/account";
+    }
+
+    @GetMapping("/account/lock/{accountId}")
+    public String lockAccount(@PathVariable(name = "accountId")Long accountId){
+        accountService.lockAccount(accountId);
+        return "redirect:/manager/account";
+    }
+
+    @GetMapping("/account/unlock/{accountId}")
+    public String unlockAccount(@PathVariable(name = "accountId")Long accountId){
+        accountService.unlockAccount(accountId);
         return "redirect:/manager/account";
     }
 
@@ -276,5 +314,50 @@ public class ManagerController {
     public String deleteCouponType(@PathVariable(name = "couponTypeId") Long couponTypeId){
         couponService.deleteCouponType(couponTypeId);
         return "redirect:/manager/coupon-type";
+    }
+
+    @GetMapping("/receptionist-register")
+    public String showReceptionistRegister(Model model){
+        model.addAttribute("account", new AccountModel());
+        model.addAttribute("error", "");
+        model.addAttribute("receptionist", new ReceptionistEntity());
+        return "manager/receptionist-register";
+    }
+
+    @PostMapping("/receptionist-register")
+    public String registerReceptionist(Model model,@ModelAttribute("account") AccountModel account,
+                                       @ModelAttribute("receptionist") ReceptionistEntity receptionistEntity){
+        try {
+            account.setRole("ROLE_RECEPTIONIST");
+            AccountEntity accountSaved = accountService.register(account);
+            accountService.saveRecepInfo(receptionistEntity, accountSaved);
+        }catch (FieldMissMatchException e){
+            String msg = e.getMessage();
+            model.addAttribute("error", msg);
+            model.addAttribute("account", new AccountModel());
+            return "manager/receptionist-register";
+        }
+        return "redirect:/user/login";
+    }
+
+    @GetMapping("/receptionist")
+    public String showReceptionistPage(){
+        return "redirect:/receptionist";
+    }
+
+    @GetMapping("/booking/detail")
+    public String showBookingDetailPage(@RequestParam("bookingId") Long bookingId,Model model){
+        RoomBookingEntity roomBookingEntity = bookingService.findById(bookingId);
+        model.addAttribute("roomBooking", roomBookingEntity);
+        model.addAttribute("formatter", DateTimeConvertor.singleFormatter());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm:ss");
+        model.addAttribute("dateTimeFormatter", dateTimeFormatter);
+        return "manager/booking-detail";
+    }
+
+    @PostMapping("/booking/detail/update")
+    public String updateBookingDetail(@ModelAttribute("roomBooking") RoomBookingEntity roomBooking){
+        bookingService.updateCustomer(roomBooking);
+        return "redirect:/manager/booking/detail?bookingId="+roomBooking.getReservationNumber();
     }
 }

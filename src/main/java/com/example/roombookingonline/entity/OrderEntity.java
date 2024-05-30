@@ -32,12 +32,14 @@ public class OrderEntity {
     @Column(name = "room_service")
     private boolean roomsService;
     @OneToOne(mappedBy = "orderEntity")
+    @JoinColumn(name = "service_invoice_id")
     private ServiceInvoiceEntity serviceInvoiceEntity;
     @Column(name = "order_date")
     private LocalDateTime orderDate;
     private boolean exist;
     private boolean active;
     @OneToOne(mappedBy = "orderEntity")
+    @JoinColumn(name = "reservation_number")
     private RoomBookingEntity roomBookingEntity;
     @Column(name = "amount_refunds")
     private double amountRefunds;
@@ -195,10 +197,19 @@ public class OrderEntity {
         }
         else {
             if (roomBookingEntity.getCheckOut() == null){
-                if(roomBookingEntity.getCheckIn().isBefore(startDatetime)){
-                    if(LocalDateTime.now().isAfter(startDatetime)){
-                        return "Staying";
-                    }
+//                if(roomBookingEntity.getCheckIn().isBefore(startDatetime)){
+//                    if(LocalDateTime.now().isAfter(startDatetime)){
+//                        return "Staying";
+//                    }
+//                    return "Check in";
+//                }
+//                else {
+//                    return "Staying";
+//                }
+                if(roomOrderEntities.get(0).getRoomDetailEntities().getStatus().toString().equals("vacant")){
+                    return "Waiting";
+                }
+                else if(roomOrderEntities.get(0).getRoomDetailEntities().getStatus().toString().equals("checkIn")){
                     return "Check in";
                 }
                 else {
@@ -258,5 +269,34 @@ public class OrderEntity {
         double adultsAmount = getAdults()*(50.5*((double) getHoursDuration() /8));
         double childsAmount = getChilds()*(20*((double) getHoursDuration() /8));
         return Math.round(adultsAmount+childsAmount);
+    }
+
+    public boolean checkRoomIsVacant(){
+        boolean vacant = false;
+        if(LocalDateTime.now().isAfter(startDatetime.minusMinutes(30))){
+            vacant = true;
+            for(RoomOrderEntity roomOrderEntity : roomOrderEntities){
+                if(!roomOrderEntity.getRoomDetailEntities().getStatus().toString().equals("vacant")){
+                    vacant = false;
+                    break;
+                }
+            }
+        }
+        return vacant;
+    }
+
+    public boolean checkRoomIsReady(){
+        boolean ready = false;
+        if ((LocalDateTime.now().isAfter(startDatetime) || LocalDateTime.now().isEqual(startDatetime))
+                &&LocalDateTime.now().isBefore(endDatetime)){
+            ready = true;
+            for(RoomOrderEntity roomOrderEntity : roomOrderEntities){
+                if(!roomOrderEntity.getRoomDetailEntities().getStatus().toString().equals("checkIn")){
+                    ready = false;
+                    break;
+                }
+            }
+        }
+        return ready;
     }
 }

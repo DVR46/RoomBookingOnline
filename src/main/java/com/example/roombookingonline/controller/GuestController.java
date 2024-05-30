@@ -30,6 +30,11 @@ public class GuestController {
     @Autowired
     private BookingCartService bookingCartService;
 
+    @GetMapping("/")
+    public String index(Model model) {
+        return "redirect:/home";
+    }
+
     @GetMapping("/home")
     private String home(Model model) {
         model.addAttribute("nameList", roomService.getRoomTypeNameExits());
@@ -41,13 +46,22 @@ public class GuestController {
     public String showFormRegister(Model model) {
         model.addAttribute("account", new AccountModel());
         model.addAttribute("nameList", roomService.getRoomTypeNameExits());
+        model.addAttribute("error", "");
         return "guest/register";
     }
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute("account") AccountModel account) throws FieldMissMatchException {
-        account.setRole("ROLE_CUSTOMER");
-        accountService.register(account);
-        return "redirect:/home";
+    public String processRegister(Model model, @ModelAttribute("account") AccountModel account) throws FieldMissMatchException {
+        try {
+            account.setRole("ROLE_CUSTOMER");
+            accountService.register(account);
+        }catch (FieldMissMatchException e){
+            String msg = e.getMessage();
+            model.addAttribute("error", msg);
+            model.addAttribute("account", new AccountModel());
+            model.addAttribute("nameList", roomService.getRoomTypeNameExits());
+            return "guest/register";
+        }
+        return "redirect:/user/login";
     }
 
     @GetMapping("/search")

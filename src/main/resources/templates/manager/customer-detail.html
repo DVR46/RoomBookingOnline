@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Customer Detail</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/resources/css/manager/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/resources/css/manager/vendors/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/resources/css/manager/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="/resources/css/manager/css/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="/resources/css/manager/images/favicon.png" />
+
+  <link rel="stylesheet" href="/resources/css/fontawesome.css" />
+
+  <link rel="stylesheet" href="/resources/css/receptionist/vendor/fonts/boxicons.css" />
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
+</head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper">
+        <div class="main-panel" style="width: 100%">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h2  style="color: #111;margin: auto"> Customer Information </h2>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-header" style="background-color: white">
+                        <div class="d-flex justify-content-center mt-4">
+                            <h4 class="border-right mr-4 pr-4">ID: <span class="text-facebook font-weight-medium" th:text="${customer.id}"></span></h4>
+                            <h4 class="border-right mr-4 pr-4">Name: <span class="text-facebook font-weight-medium" th:text="${customer.name}"></span></h4>
+                            <h4 class="border-right mr-4 pr-4">ID Card No: <span class="text-facebook font-weight-medium" th:text="${customer.idCartNo}"></span></h4>
+                            <h4 class="border-right mr-4 pr-4">Age: <span class="text-facebook font-weight-medium" th:text="${customer.age}"></span></h4>
+                            <h4>Address: <span class="text-facebook font-weight-medium" th:text="${customer.address}"></span></h4>
+                        </div>
+                        <h4>Booking List Of Customer</h4>
+                    </div>
+                  <div class="card-body table-responsive">
+                    <table class="table table-hover" id="example">
+                        <thead>
+                        <tr>
+                            <th>Reservation</th>
+                            <th>Order ID</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>No of Customer</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        <tr th:each="booking, i : ${customer.roomBookingEntities}">
+                            <td><strong th:text="${booking.reservationNumber}"></strong></td>
+                            <td th:text="${booking.orderEntity.id}"></td>
+                            <td th:text="${booking.orderEntity.startDatetime}"></td>
+                            <td th:text="${booking.orderEntity.endDatetime}"></td>
+                            <td th:text="${booking.checkIn}"></td>
+                            <td th:text="${booking.checkOut==null}?'':${booking.checkOut}"></td>
+                            <td th:text="${booking.customers.size()}"></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" target="_blank"
+                                           th:href="@{/manager/booking/detail(bookingId=${booking.reservationNumber})}">
+                                            <i class="bx bx-detail mr-1"></i>View Detail</a>
+                                        <a class="dropdown-item" target="_blank"
+                                           th:if="${booking.checkOut!=null}"
+                                           th:href="@{/manager/order/billing(bookingId=${booking.reservationNumber})}">
+                                            <i class="bx bx-export mr-1"></i> Export Bill</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="/resources/css/manager/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/resources/css/manager/js/off-canvas.js"></script>
+    <script src="/resources/css/manager/js/hoverable-collapse.js"></script>
+    <script src="/resources/css/manager/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
+    <script src="/resources/css/receptionist/js/datatables-booking-history.js"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

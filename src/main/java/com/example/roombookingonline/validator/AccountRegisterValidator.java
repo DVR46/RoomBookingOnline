@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 @Component
 public class AccountRegisterValidator {
-    public void registerUser(AccountModel accountModel) throws FieldMissMatchException {
+    public void rePasswordCheck(AccountModel accountModel) throws FieldMissMatchException {
 
         if(!Objects.equals(accountModel.getPassword(), accountModel.getRePassword())){
             throw new FieldMissMatchException("Password miss match.");

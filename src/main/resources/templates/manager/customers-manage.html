@@ -4,7 +4,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Room Type Manage</title>
+  <title>Customer Manage</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/resources/css/manager/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/resources/css/manager/vendors/flag-icon-css/css/flag-icon.min.css">
@@ -129,9 +129,14 @@
                   </a>
                   <div role="separator" class="dropdown-divider"></div>
                   <h5 class="dropdown-header text-uppercase  pl-2 text-dark mt-2">Actions</h5>
-                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
-                    <span>Lock Account</span>
-                    <i class="mdi mdi-lock ml-1"></i>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between"
+                     target="_blank" href="/manager/receptionist">
+                    <span>Switch to Receptionist</span>
+                    <i class="mdi mdi-swap-horizontal ml-1"></i>
+                  </a>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="/manager/receptionist-register">
+                    <span>Register Receptionist Account</span>
+                    <i class="mdi mdi-plus ml-1"></i>
                   </a>
                   <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="/process_logout">
                     <span>Log Out</span>
@@ -336,8 +341,20 @@
                           <td th:text="${cus.address}"></td>
                           <td th:text="${cus.roomBookingEntities.size()}"></td>
                           <td>
-                            <a class="btn btn-outline-success" >
-                              <i class="bx bx-edit-alt mr-2" style="font-size: 14px" ></i>View Detail</a>
+                            <div class="dropdown">
+                              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-toggle="dropdown" style="color: #b9b4ac;">
+                                <i class="bx bx-dots-vertical-rounded" style="font-size: 2em"></i>
+                              </button>
+                              <div class="dropdown-menu navbar-dropdown">
+                                <a class="dropdown-item text-primary"
+                                   th:href="@{/manager/customer/detail/{customerId}(customerId=${cus.id})}" target="_blank">
+                                  <i class="bx bx-edit-alt mr-2" style="font-size: 14px;cursor: pointer"></i>View Detail</a>
+                                <a class="dropdown-item text-success" style="cursor: pointer" data-toggle="modal" data-target="#exampleModal"
+                                   th:data-id="${cus.id}" th:data-name="${cus.name}" th:data-idCard="${cus.idCartNo}"
+                                   th:data-age="${cus.age}" th:data-address="${cus.address}">
+                                  <i class="bx bx-edit-alt mr-2" style="font-size: 14px"></i>Update</a>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -353,6 +370,47 @@
                       </tr>
                       </tfoot>
                     </table>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalTitle">Update Customer</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <form action="/manager/customer/update" method="post">
+                            <div class="modal-body">
+                              <div class="form-group">
+                                <input type="hidden" id="id-update" th:field="*{customer.id}">
+                                <label for="name-update">Name</label>
+                                <input type="text" class="form-control" id="name-update"
+                                       th:field="*{customer.name}" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="idCard-update">ID Card No</label>
+                                <input type="number" class="form-control" id="idCard-update" step="1"
+                                       th:field="*{customer.idCartNo}" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="age-update">Age</label>
+                                <input type="number" class="form-control" id="age-update" step="1" min="0"
+                                       th:field="*{customer.age}" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="address-update">Address</label>
+                                <input type="text" class="form-control" id="address-update"
+                                       th:field="*{customer.address}">
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -381,5 +439,24 @@
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
     <script src="/resources/css/manager/js/datatables-customer-manage.js"></script>
     <!-- End custom js for this page -->
+    <script>
+      $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+      })
+
+      $('#exampleModal').on('show.bs.modal', function (event) {
+        let id = $(event.relatedTarget).data('id')
+        let name = $(event.relatedTarget).data('name')
+        let age = $(event.relatedTarget).data('age')
+        let idCard = $(event.relatedTarget).data('idcard')
+        let address = $(event.relatedTarget).data('address')
+
+        $(this).find('.modal-body #id-update').val(id)
+        $(this).find('.modal-body #name-update').val(name)
+        $(this).find('.modal-body #age-update').val(age)
+        $(this).find('.modal-body #idCard-update').val(idCard)
+        $(this).find('.modal-body #address-update').val(address)
+      })
+    </script>
   </body>
 </html>

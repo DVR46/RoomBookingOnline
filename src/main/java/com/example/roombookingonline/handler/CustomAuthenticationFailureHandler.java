@@ -14,14 +14,14 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response,
-                                        AuthenticationException exception)
+                                        AuthenticationException exception
+                                        )
             throws IOException, ServletException {
-
         System.out.println(exception);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
-        String jsonPayload = "{\"message\" : \"%s\", \"timestamp\" : \"%s\" }";
-        response.getOutputStream().println(String.format(jsonPayload, exception.getMessage(), Calendar.getInstance().getTime()));
-        response.sendRedirect("login?error=Bad credentials");
+//        String jsonPayload = "{\"message\" : \"%s\", \"timestamp\" : \"%s\" }";
+//        response.getOutputStream().println(String.format(jsonPayload, exception.getMessage(), Calendar.getInstance().getTime()));
+        response.sendRedirect("/user/login?error="+exception.getMessage());
     }
 }

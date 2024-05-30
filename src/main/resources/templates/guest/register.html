@@ -148,6 +148,16 @@
                             <form action="/register" method="post" th:object="${account}">
                                 <div class="row g-3">
                                     <div class="col-md-12">
+                                        <p th:if="${error != ''}" th:text="${error}" class="text-danger"></p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating">
+                                            <input type="email" class="form-control" id="email" placeholder="Your Email"
+                                                   th:field="*{email}" required>
+                                            <label for="email">Your Email</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="username" placeholder="Username"
                                                    th:field="*{username}" required>
@@ -166,13 +176,6 @@
                                             <input type="password" class="form-control" id="rePassword" placeholder="Re-enter Password"
                                                    th:field="*{rePassword}" required>
                                             <label for="rePassword">Re-enter Password</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-floating">
-                                            <input type="email" class="form-control" id="email" placeholder="Your Email"
-                                                   th:field="*{email}" required>
-                                            <label for="email">Your Email</label>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

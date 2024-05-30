@@ -14,4 +14,8 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
 
     CustomerEntity findByIdCartNo(long idCartNo);
 
+    @Query(value = "from CustomerEntity c " +
+            "where c.name!=''")
+    List<CustomerEntity> findAllByNameIsNotEmpty();
+
 }

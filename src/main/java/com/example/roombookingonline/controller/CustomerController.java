@@ -5,12 +5,16 @@ import com.example.roombookingonline.entity.*;
 import com.example.roombookingonline.exception.CouponUsedUpException;
 import com.example.roombookingonline.security.UserPrincipal;
 import com.example.roombookingonline.service.*;
+import com.example.roombookingonline.service.impl.VNPayService;
 import com.example.roombookingonline.ulti.SecurityUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,9 +34,13 @@ public class CustomerController {
     private CouponService couponService;
     @Autowired
     private BookingCartService bookingCartService;
+    @Autowired
+    private VNPayService vnPayService;
+
 
     @GetMapping("/login")
-    public String showLoginPage(Model model) {
+    public String showLoginPage(Model model, @RequestParam(value = "error", defaultValue = "")String error) {
+        model.addAttribute("error", error);
         return "customer/login";
     }
 
@@ -69,32 +77,53 @@ public class CustomerController {
         return "customer/booking";
     }
 
-    @PostMapping("/booking/process")
-    public String processBooking(@RequestParam(name = "couponCode", defaultValue = "none")String couponCode,
-                                 @ModelAttribute OrderEntity order,
-                                 Model model) throws Exception {
-        try {
-            if(!couponCode.equals("none")) {
-                order.setCouponEntity(couponService.findByCode(couponCode));
+    @GetMapping("/booking/process")
+    public String processBooking(HttpServletRequest request,
+                                 @RequestParam(name = "couponCode", defaultValue = "none")String couponCode,
+                                 @ModelAttribute OrderEntity order) {
+        String redirect = vnPayService.createVnPayPayment(request, order.getAmount()
+                , couponCode, order.isRoomsService(), order.isMassageServices());
+        System.out.println(redirect);
+        return "redirect:" + redirect;
+    }
+
+    @GetMapping("/booking/callback")
+    public String processBookingCallback(HttpServletRequest request, Model model) throws Exception, CouponUsedUpException {
+        String status = request.getParameter("vnp_ResponseCode");
+        if (status.equals("00")) {
+            try {
+                OrderEntity order = new OrderEntity();
+                order.setAmount(Double.parseDouble(request.getParameter("price")));
+                String couponCode = request.getParameter("couponCode");
+                String roomService = request.getParameter("roomService");
+                String massageServices = request.getParameter("massageService");
+                if(!couponCode.equals("none")) {
+                    order.setCouponEntity(couponService.findByCode(couponCode));
+                }
+                if(roomService.equals("true")) {
+                    order.setRoomsService(true);
+                }
+                if(massageServices.equals("true")) {
+                    order.setMassageServices(true);
+                }
+                order.setStartDatetime(bookingCartService.getStart());
+                order.setEndDatetime(bookingCartService.getEnd());
+                UserPrincipal user = SecurityUtil.currentUser();
+                order.setAccountEntity(accountService.findById(user.getId()));
+                Map<RoomDetailEntity, Integer> roomDetailOrder = bookingCartService.getListRoomForOrder();
+                double massageServiceAmount = bookingCartService.getMassageServiceAmount();
+                double roomServiceAmount = bookingCartService.getRoomServiceAmount();
+                OrderEntity orderSuccess = orderService.createOrder(order, roomDetailOrder, massageServiceAmount, roomServiceAmount);
+                orderService.generateQRCode(orderSuccess);
+                model.addAttribute("orderSuccess", orderSuccess);
+                bookingCartService.deleteCart();
+                return "message/booking-success";
+            } catch (Exception e) {
+                System.out.println(e.getMessage() + " " + e.getCause());
+                return "message/booking-error";
             }
-            order.setStartDatetime(bookingCartService.getStart());
-            order.setEndDatetime(bookingCartService.getEnd());
-            UserPrincipal user = SecurityUtil.currentUser();
-            order.setAccountEntity(accountService.findById(user.getId()));
-            Map<RoomDetailEntity, Integer> roomDetailOrder = bookingCartService.getListRoomForOrder();
-            double massageServiceAmount = bookingCartService.getMassageServiceAmount();
-            double roomServiceAmount = bookingCartService.getRoomServiceAmount();
-            OrderEntity orderSuccess = orderService.createOrder(order, roomDetailOrder, massageServiceAmount, roomServiceAmount);
-            orderService.generateQRCode(orderSuccess);
-            model.addAttribute("orderSuccess", orderSuccess);
-            bookingCartService.deleteCart();
-            return "message/booking-success";
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage() + " " + e.getCause());
+        } else {
             return "message/booking-error";
-        } catch (CouponUsedUpException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -148,43 +177,19 @@ public class CustomerController {
         return "receptionist/booking-invoice";
     }
 
+    @GetMapping("/profile")
+    public String profile(Model model){
+        UserPrincipal user = SecurityUtil.currentUser();
+        AccountEntity account = accountService.findById(user.getId());
+        model.addAttribute("account", account);
+        return "customer/account-profile";
+    }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(@ModelAttribute("account")AccountEntity accountEntity){
+        accountService.updateAccount(accountEntity);
+        return "redirect:/user/profile";
+    }
+
 }
 
-//class OrderClone {
-//    private Long id;
-//    private double amount;
-//    private boolean messageServices;
-//    private boolean roomsService;
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public double getAmount() {
-//        return amount;
-//    }
-//
-//    public void setAmount(double amount) {
-//        this.amount = amount;
-//    }
-//
-//    public boolean isMessageServices() {
-//        return messageServices;
-//    }
-//
-//    public void setMessageServices(boolean messageServices) {
-//        this.messageServices = messageServices;
-//    }
-//
-//    public boolean isRoomsService() {
-//        return roomsService;
-//    }
-//
-//    public void setRoomsService(boolean roomsService) {
-//        this.roomsService = roomsService;
-//    }
-//}

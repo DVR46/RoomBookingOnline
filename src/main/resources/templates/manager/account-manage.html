@@ -129,9 +129,14 @@
                   </a>
                   <div role="separator" class="dropdown-divider"></div>
                   <h5 class="dropdown-header text-uppercase  pl-2 text-dark mt-2">Actions</h5>
-                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="#">
-                    <span>Lock Account</span>
-                    <i class="mdi mdi-lock ml-1"></i>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between"
+                     target="_blank" href="/manager/receptionist">
+                    <span>Switch to Receptionist</span>
+                    <i class="mdi mdi-swap-horizontal ml-1"></i>
+                  </a>
+                  <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="/manager/receptionist-register">
+                    <span>Register Receptionist Account</span>
+                    <i class="mdi mdi-plus ml-1"></i>
                   </a>
                   <a class="dropdown-item py-1 d-flex align-items-center justify-content-between" href="/process_logout">
                     <span>Log Out</span>
@@ -380,16 +385,25 @@
                                 <i class="bx bx-dots-vertical-rounded" style="font-size: 2em"></i>
                               </button>
                               <div class="dropdown-menu navbar-dropdown">
-                                <a class="dropdown-item text-success" th:href="@{/manager/account/detail/{accountId}(accountId=${account.id})}" target="_blank">
+                                <a class="dropdown-item text-success"
+                                   th:href="@{/manager/account/detail/{accountId}(accountId=${account.id})}" target="_blank">
                                   <i class="bx bx-edit-alt mr-2" style="font-size: 14px;cursor: pointer"></i>View Detail</a>
                                 <a th:if="${account.active&&account.baned&&account.role!='ROLE_MANAGER'}"
                                    th:href="@{/manager/account/unban/{accountId}(accountId=${account.id})}"
                                    class="dropdown-item text-primary">
-                                  <i class="bx bx-edit-alt mr-2" style="font-size: 14px;cursor: pointer"></i>Unban</a>
+                                  <i class="bx bx-user-check mr-2" style="font-size: 14px;cursor: pointer"></i>Unban</a>
                                 <a th:if="${account.active&&!account.baned&&account.role!='ROLE_MANAGER'}" data-toggle="modal" data-target="#exampleModalCenter"
                                    th:data-accountid="${account.id}" th:data-username="${account.username}"
                                    class="dropdown-item text-danger">
-                                  <i class="bx bx-edit-alt mr-2" style="font-size: 14px;cursor: pointer"></i>Ban</a>
+                                  <i class="bx bx-user-x mr-2" style="font-size: 14px;cursor: pointer"></i>Ban</a>
+                                <a th:if="${!account.active&&account.role!='ROLE_MANAGER'}"
+                                   th:href="@{/manager/account/unlock/{accountId}(accountId=${account.id})}"
+                                   class="dropdown-item text-facebook">
+                                  <i class="bx bx-lock-open mr-2" style="font-size: 14px;cursor: pointer"></i>Unlock</a>
+                                <a th:if="${account.active&&account.role!='ROLE_MANAGER'}"
+                                   th:href="@{/manager/account/lock/{accountId}(accountId=${account.id})}"
+                                   class="dropdown-item text-danger">
+                                  <i class="bx bx-lock mr-2" style="font-size: 14px;cursor: pointer"></i>Lock</a>
 <!--                                <a class="dropdown-item text-danger" th:href="@{/manager/order/delete(orderId=${order.id})}">-->
 <!--                                  <i class="bx bx-trash mr-2" style="font-size: 14px"></i>Delete</a>-->
                               </div>

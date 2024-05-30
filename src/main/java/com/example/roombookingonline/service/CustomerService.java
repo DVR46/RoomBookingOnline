@@ -8,4 +8,6 @@ public interface CustomerService {
     List<CustomerEntity> getAllCustomer();
 
     CustomerEntity findById(Long id);
+
+    void update(CustomerEntity customerEntity);
 }
